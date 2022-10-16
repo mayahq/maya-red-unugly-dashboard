@@ -4,6 +4,7 @@ const {
     fields
 } = require('@mayahq/module-sdk')
 const { init, clients } = require('../../util/socket')
+const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
 class DashboardTable extends Node {
     constructor(node, RED, opts) {
@@ -19,7 +20,8 @@ class DashboardTable extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
-            width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 })
+            width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' })
             // Whatever custom fields the node needs.
         },
     })

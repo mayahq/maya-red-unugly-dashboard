@@ -1,6 +1,7 @@
 const {
     Node,
-    Schema
+    Schema,
+    fields
 } = require('@mayahq/module-sdk')
 
 class DashboardGroup extends Node {
@@ -17,7 +18,8 @@ class DashboardGroup extends Node {
         category: 'config',
         isConfig: true,
         fields: {
-            // Whatever custom fields the node needs.
+            title: new fields.Typed({type: 'str', allowedTypes: ['str'], defaultVal: 'Data', displayName: 'Title' }),
+            width: new fields.Typed({type: 'num', allowedTypes: ['num'], defaultVal: 8, displayName: 'Columns' }),
         },
     })
 

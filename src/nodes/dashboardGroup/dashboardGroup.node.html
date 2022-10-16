@@ -9,6 +9,20 @@
             isProfileConfigNode: {
                 value: false
             },
+            title: {
+                value: "Data",
+                required: false
+            },
+            payloadTypetitle: {
+                value: "str"
+            },
+            width: {
+                value: "8",
+                required: false
+            },
+            payloadTypewidth: {
+                value: "num"
+            },
         },
         inputs: 1,
         outputs: 1,
@@ -18,7 +32,44 @@
         },
         paletteLabel: "dashboard-group",
         exportable: true,
-        oneditprepare: function() {},
+        oneditprepare: function() {
+            if (this.payloadTypetitle === null) {
+                if (this.title === "") {
+                    this.payloadTypetitle = "date"
+                } else {
+                    this.payloadTypetitle = "str"
+                }
+            } else if (this.payloadTypetitle === 'string' || this.payloadTypetitle === 'none') {
+                this.payloadTypetitle = "str"
+            }
+
+            $("#node-config-input-payloadTypetitle").val(this.payloadTypetitle)
+            $("#node-config-input-title").typedInput({
+                default: "str",
+                typeField: $("#node-config-input-payloadTypetitle"),
+                types: ["str"]
+            })
+            $("#node-config-input-title").typedInput("type", this.payloadTypetitle)
+
+            if (this.payloadTypewidth === null) {
+                if (this.width === "") {
+                    this.payloadTypewidth = "date"
+                } else {
+                    this.payloadTypewidth = "num"
+                }
+            } else if (this.payloadTypewidth === 'string' || this.payloadTypewidth === 'none') {
+                this.payloadTypewidth = "num"
+            }
+
+            $("#node-config-input-payloadTypewidth").val(this.payloadTypewidth)
+            $("#node-config-input-width").typedInput({
+                default: "num",
+                typeField: $("#node-config-input-payloadTypewidth"),
+                types: ["num"]
+            })
+            $("#node-config-input-width").typedInput("type", this.payloadTypewidth)
+
+        },
         oneditsave: function() {},
         oneditcancel: function() {},
         oneditdelete: function() {},
@@ -32,6 +83,16 @@
     <div class="form-row">
         <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-title">Title</label>
+        <input type="text" id="node-config-input-title"></input>
+        <input type="hidden" id="node-config-input-payloadTypetitle">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-width">Columns</label>
+        <input type="text" id="node-config-input-width"></input>
+        <input type="hidden" id="node-config-input-payloadTypewidth">
     </div>
 </script>
 
