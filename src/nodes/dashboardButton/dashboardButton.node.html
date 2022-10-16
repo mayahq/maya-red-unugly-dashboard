@@ -1,0 +1,237 @@
+<script type='text/javascript'>
+    RED.nodes.registerType("dashboard-button", {
+        category: "Maya Red Unugly Dashboard",
+        color: "#8BBDD9",
+        defaults: {
+            name: {
+                value: ""
+            },
+            isProfileConfigNode: {
+                value: false
+            },
+            width: {
+                value: "2",
+                required: false
+            },
+            payloadTypewidth: {
+                value: "num"
+            },
+            label: {
+                value: "Button",
+                required: false
+            },
+            payloadTypelabel: {
+                value: "str"
+            },
+            tooltip: {
+                value: "",
+                required: false
+            },
+            payloadTypetooltip: {
+                value: "str"
+            },
+            color: {
+                value: "",
+                required: false
+            },
+            payloadTypecolor: {
+                value: "str"
+            },
+            loadingOnClick: {
+                value: "yes"
+            },
+            payloadOnClick: {
+                value: "payload",
+                required: false
+            },
+            payloadTypepayloadOnClick: {
+                value: "flow"
+            },
+            group: {
+                value: "",
+                type: "dashboard-group"
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "fa-file-code-o.png",
+        label: function() {
+            return this.name || "dashboard-button"
+        },
+        paletteLabel: "dashboard-button",
+        exportable: true,
+        oneditprepare: function() {
+            if (this.payloadTypewidth === null) {
+                if (this.width === "") {
+                    this.payloadTypewidth = "date"
+                } else {
+                    this.payloadTypewidth = "num"
+                }
+            } else if (this.payloadTypewidth === 'string' || this.payloadTypewidth === 'none') {
+                this.payloadTypewidth = "num"
+            }
+
+            $("#node-input-payloadTypewidth").val(this.payloadTypewidth)
+            $("#node-input-width").typedInput({
+                default: "num",
+                typeField: $("#node-input-payloadTypewidth"),
+                types: ["num"]
+            })
+            $("#node-input-width").typedInput("type", this.payloadTypewidth)
+
+            if (this.payloadTypelabel === null) {
+                if (this.label === "") {
+                    this.payloadTypelabel = "date"
+                } else {
+                    this.payloadTypelabel = "str"
+                }
+            } else if (this.payloadTypelabel === 'string' || this.payloadTypelabel === 'none') {
+                this.payloadTypelabel = "str"
+            }
+
+            $("#node-input-payloadTypelabel").val(this.payloadTypelabel)
+            $("#node-input-label").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypelabel"),
+                types: ["str"]
+            })
+            $("#node-input-label").typedInput("type", this.payloadTypelabel)
+
+            if (this.payloadTypetooltip === null) {
+                if (this.tooltip === "") {
+                    this.payloadTypetooltip = "date"
+                } else {
+                    this.payloadTypetooltip = "str"
+                }
+            } else if (this.payloadTypetooltip === 'string' || this.payloadTypetooltip === 'none') {
+                this.payloadTypetooltip = "str"
+            }
+
+            $("#node-input-payloadTypetooltip").val(this.payloadTypetooltip)
+            $("#node-input-tooltip").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypetooltip"),
+                types: ["str"]
+            })
+            $("#node-input-tooltip").typedInput("type", this.payloadTypetooltip)
+
+            if (this.payloadTypecolor === null) {
+                if (this.color === "") {
+                    this.payloadTypecolor = "date"
+                } else {
+                    this.payloadTypecolor = "str"
+                }
+            } else if (this.payloadTypecolor === 'string' || this.payloadTypecolor === 'none') {
+                this.payloadTypecolor = "str"
+            }
+
+            $("#node-input-payloadTypecolor").val(this.payloadTypecolor)
+            $("#node-input-color").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypecolor"),
+                types: ["str"]
+            })
+            $("#node-input-color").typedInput("type", this.payloadTypecolor)
+
+            const loadingOnClickselectFieldValues = ["yes", "no"]
+            loadingOnClickselectFieldValues.forEach((val) => {
+                $("#node-input-loadingOnClick").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-loadingOnClick").val(this.loadingOnClick)
+
+            if (this.payloadTypepayloadOnClick === null) {
+                if (this.payloadOnClick === "") {
+                    this.payloadTypepayloadOnClick = "date"
+                } else {
+                    this.payloadTypepayloadOnClick = "flow"
+                }
+            } else if (this.payloadTypepayloadOnClick === 'string' || this.payloadTypepayloadOnClick === 'none') {
+                this.payloadTypepayloadOnClick = "flow"
+            }
+
+            $("#node-input-payloadTypepayloadOnClick").val(this.payloadTypepayloadOnClick)
+            $("#node-input-payloadOnClick").typedInput({
+                default: "flow",
+                typeField: $("#node-input-payloadTypepayloadOnClick"),
+                types: ["msg", "flow", "global", "str", "num", "boolean", "json"]
+            })
+            $("#node-input-payloadOnClick").typedInput("type", this.payloadTypepayloadOnClick)
+
+        },
+        oneditsave: function() {},
+        oneditcancel: function() {},
+        oneditdelete: function() {},
+        oneditresize: function() {},
+        onpaletteadd: function() {},
+        onpaletteremove: function() {}
+    });
+</script>
+
+<script type="text/html" data-template-name="dashboard-button">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-width">Width</label>
+        <input type="text" id="node-input-width"></input>
+        <input type="hidden" id="node-input-payloadTypewidth">
+    </div>
+    <div class="form-row">
+        <label for="node-input-label">Label</label>
+        <input type="text" id="node-input-label"></input>
+        <input type="hidden" id="node-input-payloadTypelabel">
+    </div>
+    <div class="form-row">
+        <label for="node-input-tooltip">Tooltip</label>
+        <input type="text" id="node-input-tooltip"></input>
+        <input type="hidden" id="node-input-payloadTypetooltip">
+    </div>
+    <div class="form-row">
+        <label for="node-input-color">Color</label>
+        <input type="text" id="node-input-color"></input>
+        <input type="hidden" id="node-input-payloadTypecolor">
+    </div>
+    <div class="form-row">
+        <label for="node-input-loadingOnClick">Show loading on click</label>
+        <select type="text" id="node-input-loadingOnClick">
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-payloadOnClick">Payload to send on click</label>
+        <input type="text" id="node-input-payloadOnClick"></input>
+        <input type="hidden" id="node-input-payloadTypepayloadOnClick">
+    </div>
+    <div class="form-row">
+        <label for="node-input-group">Group</label>
+        <input type="text" id="node-input-group"></input>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="dashboard-button">
+    <h2>Description</h2>
+    <p>Query opens tabs based on criteria like URL, muted status</p>
+
+    <h2>Config</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+
+
+    <h2>Outputs</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+</script>

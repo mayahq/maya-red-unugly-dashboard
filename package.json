@@ -19,7 +19,8 @@
   "node-red": {
     "nodes": {
       "dashboard-table": "src/nodes/dashboardTable/dashboardTable.node.js",
-      "dashboard-group": "src/nodes/dashboardGroup/dashboardGroup.node.js"
+      "dashboard-group": "src/nodes/dashboardGroup/dashboardGroup.node.js",
+      "dashboard-button": "src/nodes/dashboardButton/dashboardButton.node.js"
     }
   },
   "mayaDetails": {
