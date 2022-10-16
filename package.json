@@ -1,0 +1,42 @@
+{
+  "name": "maya-red-unugly-dashboard",
+  "version": "1.0.0",
+  "description": "Non-ugly dashboard for Maya",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+.git"
+  },
+  "author": "dush-t",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mayahq/mayadev/issues"
+  },
+  "homepage": "#readme",
+  "nodepath": "src/nodes",
+  "nodeRedModuleName": "maya-red-unugly-dashboard",
+  "node-red": {
+    "nodes": {
+      "dashboard-table": "src/nodes/dashboardTable/dashboardTable.node.js",
+      "dashboard-group": "src/nodes/dashboardGroup/dashboardGroup.node.js"
+    }
+  },
+  "mayaDetails": {
+    "name": "maya-red-unugly-dashboard",
+    "version": "1.0.0",
+    "description": "Non-ugly dashboard for Maya",
+    "author": "dush-t",
+    "type": "git",
+    "needsUserProfile": false,
+    "thumbnail": "",
+    "repository": {
+      "type": "git",
+      "url": "git+.git"
+    }
+  },
+  "dependencies": {
+    "@mayahq/module-sdk": "^2.2.3",
+    "socket.io": "^4.5.3"
+  }
+}
