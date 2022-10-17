@@ -1,10 +1,13 @@
 const path = require('path')
 const socketio = require('socket.io');
+const events = require('events')
 
 let inited = false // true if the socket has been initialised
 const sockpath = 'dashsock'
 
 const clients = {}
+
+const ev = new events.EventEmitter()
 
 function init(server, redSettings) {
     if (inited) {
@@ -33,6 +36,11 @@ function init(server, redSettings) {
             console.log('ping data', data, socket.emit)
             socket.emit('pong', data)
         })
+
+        socket.on('uiEvent', (data) => {
+            const { componentId, event } = data
+            ev.emit(componentId, { event, _sockId: socket.id })
+        })
     })
 
     inited = true
@@ -41,5 +49,6 @@ function init(server, redSettings) {
 
 module.exports = {
     init,
-    clients
+    clients,
+    uiEventListener: ev
 }

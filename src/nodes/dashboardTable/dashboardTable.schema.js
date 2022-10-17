@@ -31,7 +31,7 @@ class DashboardTable extends Node {
     }
 
     async onMessage(msg, vals) {
-        const _sockId = msg.sockId
+        const _sockId = msg._sockId
         let socks = []
         if (_sockId) {
             socks = [_sockId]

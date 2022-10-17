@@ -3,7 +3,7 @@ const {
     Schema,
     fields
 } = require('@mayahq/module-sdk')
-const { init, clients } = require('../../util/socket')
+const { init, clients, uiEventListener } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
 class DashboardButton extends Node {
@@ -38,7 +38,11 @@ class DashboardButton extends Node {
     })
 
     onInit() {
-        // init(this.RED.server, this.RED.settings)
+        init(this.RED.server, this.RED.settings)
+
+        uiEventListener.on(`button:${this.redNode.id}`, ({ event, _sockId }) => {
+            this.redNode.send({ event, _sockId })
+        })
     }
 
     async onMessage(msg, vals) {
