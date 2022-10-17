@@ -4,6 +4,15 @@ const {
     fields
 } = require('@mayahq/module-sdk')
 
+// const defaultPosition = JSON.stringify({
+//     x: 0,
+//     y: 0,
+//     w: 8,
+//     h: 6,
+//     maxW: 12,
+//     maxH: 12
+// })
+
 class DashboardGroup extends Node {
     constructor(node, RED, opts) {
         super(node, RED, {
@@ -20,6 +29,7 @@ class DashboardGroup extends Node {
         fields: {
             title: new fields.Typed({type: 'str', allowedTypes: ['str'], defaultVal: 'Data', displayName: 'Title' }),
             width: new fields.Typed({type: 'num', allowedTypes: ['num'], defaultVal: 8, displayName: 'Columns' }),
+            positionDetails: new fields.Typed({type: 'json', allowedTypes: ['json'], defaultVal: '{}', displayName: 'Positioning' }),
         },
     })
 

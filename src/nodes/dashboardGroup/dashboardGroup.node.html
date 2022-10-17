@@ -23,6 +23,13 @@
             payloadTypewidth: {
                 value: "num"
             },
+            positionDetails: {
+                value: "{}",
+                required: false
+            },
+            payloadTypepositionDetails: {
+                value: "json"
+            },
         },
         inputs: 1,
         outputs: 1,
@@ -69,6 +76,24 @@
             })
             $("#node-config-input-width").typedInput("type", this.payloadTypewidth)
 
+            if (this.payloadTypepositionDetails === null) {
+                if (this.positionDetails === "") {
+                    this.payloadTypepositionDetails = "date"
+                } else {
+                    this.payloadTypepositionDetails = "json"
+                }
+            } else if (this.payloadTypepositionDetails === 'string' || this.payloadTypepositionDetails === 'none') {
+                this.payloadTypepositionDetails = "json"
+            }
+
+            $("#node-config-input-payloadTypepositionDetails").val(this.payloadTypepositionDetails)
+            $("#node-config-input-positionDetails").typedInput({
+                default: "json",
+                typeField: $("#node-config-input-payloadTypepositionDetails"),
+                types: ["json"]
+            })
+            $("#node-config-input-positionDetails").typedInput("type", this.payloadTypepositionDetails)
+
         },
         oneditsave: function() {},
         oneditcancel: function() {},
@@ -93,6 +118,11 @@
         <label for="node-config-input-width">Columns</label>
         <input type="text" id="node-config-input-width"></input>
         <input type="hidden" id="node-config-input-payloadTypewidth">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-positionDetails">Positioning</label>
+        <input type="text" id="node-config-input-positionDetails"></input>
+        <input type="hidden" id="node-config-input-payloadTypepositionDetails">
     </div>
 </script>
 
