@@ -3,7 +3,7 @@ const {
     Schema,
     fields
 } = require('@mayahq/module-sdk')
-const { init, clients } = require('../../util/socket')
+const { init, clients, uiEventListener } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
 class DashboardTable extends Node {
@@ -20,6 +20,7 @@ class DashboardTable extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
+            alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myTable' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
             group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' })
             // Whatever custom fields the node needs.
@@ -28,14 +29,23 @@ class DashboardTable extends Node {
 
     onInit() {
         init(this.RED.server, this.RED.settings)
+        uiEventListener.on(`table:${this.redNode.id}`, ({ event, _sockId }) => {
+            const { rowData } = event
+            this.redNode.send({ rowData: [rowData], _sockId })
+        })
     }
 
     async onMessage(msg, vals) {
+        const context = this.redNode.context()
+        const tableEvent = msg.tableEvent
+        // if (tableEvent.type === 'POPULATE') {
+        //     context.flow.set(`table_${vals.alias}_rowData`, tableEvent.data)
+        // }
+
         const _sockId = msg._sockId
         let socks = []
         if (_sockId) {
             socks = [_sockId]
-            
         } else {
             socks = Object.keys(clients)
         }
@@ -48,7 +58,7 @@ class DashboardTable extends Node {
             sock.emit('dashboardDataUpdate', {
                 componentType: 'TABLE',
                 componentId: `table::${this.redNode.id}`,
-                event: msg.tableEvent,
+                event: tableEvent,
                 sockId: sockId
             })
         })

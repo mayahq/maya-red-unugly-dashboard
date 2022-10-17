@@ -38,6 +38,7 @@ function init(server, redSettings) {
         })
 
         socket.on('uiEvent', (data) => {
+            console.log('got uiEvent', data)
             const { componentId, event } = data
             ev.emit(componentId, { event, _sockId: socket.id })
         })
