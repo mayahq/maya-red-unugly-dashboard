@@ -34,6 +34,9 @@
     "repository": {
       "type": "git",
       "url": "git+.git"
+    },
+    "origin": {
+      "moduleId": "634cf176ad7a29001c59b890"
     }
   },
   "dependencies": {
