@@ -29,7 +29,7 @@ class DashboardGroup extends Node {
         fields: {
             title: new fields.Typed({type: 'str', allowedTypes: ['str'], defaultVal: 'Data', displayName: 'Title' }),
             width: new fields.Typed({type: 'num', allowedTypes: ['num'], defaultVal: 8, displayName: 'Columns' }),
-            positionDetails: new fields.Typed({type: 'json', allowedTypes: ['json'], defaultVal: '{}', displayName: 'Positioning' }),
+            positionDetails: new fields.Typed({type: 'json', allowedTypes: ['json'], defaultVal: '', displayName: 'Positioning' }),
         },
     })
 
