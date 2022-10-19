@@ -3,10 +3,10 @@ const {
     Schema,
     fields
 } = require('@mayahq/module-sdk')
-const { init, clients, uiEventListener } = require('../../util/socket')
+const { clients } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
-class DashboardTable extends Node {
+class DashboardTemplate extends Node {
     constructor(node, RED, opts) {
         super(node, RED, {
             ...opts,
@@ -15,33 +15,24 @@ class DashboardTable extends Node {
     }
 
     static schema = new Schema({
-        name: 'dashboard-table',
-        label: 'dashboard-table',
+        name: 'dashboard-template',
+        label: 'dashboard-template',
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
-            alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myTable' }),
+            templateType: new fields.Select({ options: ['email', 'text'], defaultVal: 'email', displayName: 'Type' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' })
-            // Whatever custom fields the node needs.
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
         },
+
     })
 
     onInit() {
         init(this.RED.server, this.RED.settings)
-        uiEventListener.on(`table:${this.redNode.id}`, ({ event, _sockId }) => {
-            const { rowData } = event
-            const payload = {}
-            Object.keys(rowData).forEach(key => {
-                payload[key] = rowData[key].value
-            })
-            this.redNode.send({ rowData: [rowData], payload, _sockId })
-        })
+        // Do something on initialization of node
     }
 
     async onMessage(msg, vals) {
-        const tableEvent = msg.tableEvent
-
         const _sockId = msg._sockId
         let socks = []
         if (_sockId) {
@@ -56,15 +47,13 @@ class DashboardTable extends Node {
                 return
             }
             sock.emit('dashboardDataUpdate', {
-                componentType: 'TABLE',
-                componentId: `table:${this.redNode.id}`,
-                event: tableEvent,
+                componentType: 'TEMPLATE',
+                componentId: `template:${this.redNode.id}`,
+                event: msg.templateEvent,
                 sockId: sockId
             })
         })
-
-        return null
     }
 }
 
-module.exports = DashboardTable
+module.exports = DashboardTemplate

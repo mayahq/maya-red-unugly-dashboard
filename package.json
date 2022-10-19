@@ -20,7 +20,9 @@
     "nodes": {
       "dashboard-table": "src/nodes/dashboardTable/dashboardTable.node.js",
       "dashboard-group": "src/nodes/dashboardGroup/dashboardGroup.node.js",
-      "dashboard-button": "src/nodes/dashboardButton/dashboardButton.node.js"
+      "dashboard-button": "src/nodes/dashboardButton/dashboardButton.node.js",
+      "dashboard-template": "src/nodes/dashboardTemplate/dashboardTemplate.node.js",
+      "dashboard-form": "src/nodes/dashboardForm/dashboardForm.node.js"
     }
   },
   "mayaDetails": {

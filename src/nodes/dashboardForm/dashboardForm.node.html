@@ -1,0 +1,253 @@
+<script type='text/javascript'>
+    RED.nodes.registerType("dashboard-form", {
+        category: "Maya Red Unugly Dashboard",
+        color: "#8BBDD9",
+        defaults: {
+            name: {
+                value: ""
+            },
+            isProfileConfigNode: {
+                value: false
+            },
+            alias: {
+                value: "myTable",
+                required: false
+            },
+            payloadTypealias: {
+                value: "str"
+            },
+            config: {
+                value: "{}",
+                required: false
+            },
+            payloadTypeconfig: {
+                value: "json"
+            },
+            submitButtonLabel: {
+                value: "Submit",
+                required: false
+            },
+            payloadTypesubmitButtonLabel: {
+                value: "str"
+            },
+            submitButtonColor: {
+                value: "",
+                required: false
+            },
+            payloadTypesubmitButtonColor: {
+                value: "str"
+            },
+            cancelButtonLabel: {
+                value: "",
+                required: false
+            },
+            payloadTypecancelButtonLabel: {
+                value: "str"
+            },
+            width: {
+                value: "8",
+                required: false
+            },
+            payloadTypewidth: {
+                value: "num"
+            },
+            group: {
+                value: "",
+                type: "dashboard-group"
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "fa-file-code-o.png",
+        label: function() {
+            return this.name || "dashboard-form"
+        },
+        paletteLabel: "dashboard-form",
+        exportable: true,
+        oneditprepare: function() {
+            if (this.payloadTypealias === null) {
+                if (this.alias === "") {
+                    this.payloadTypealias = "date"
+                } else {
+                    this.payloadTypealias = "str"
+                }
+            } else if (this.payloadTypealias === 'string' || this.payloadTypealias === 'none') {
+                this.payloadTypealias = "str"
+            }
+
+            $("#node-input-payloadTypealias").val(this.payloadTypealias)
+            $("#node-input-alias").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypealias"),
+                types: ["str"]
+            })
+            $("#node-input-alias").typedInput("type", this.payloadTypealias)
+
+            if (this.payloadTypeconfig === null) {
+                if (this.config === "") {
+                    this.payloadTypeconfig = "date"
+                } else {
+                    this.payloadTypeconfig = "json"
+                }
+            } else if (this.payloadTypeconfig === 'string' || this.payloadTypeconfig === 'none') {
+                this.payloadTypeconfig = "json"
+            }
+
+            $("#node-input-payloadTypeconfig").val(this.payloadTypeconfig)
+            $("#node-input-config").typedInput({
+                default: "json",
+                typeField: $("#node-input-payloadTypeconfig"),
+                types: ["json"]
+            })
+            $("#node-input-config").typedInput("type", this.payloadTypeconfig)
+
+            if (this.payloadTypesubmitButtonLabel === null) {
+                if (this.submitButtonLabel === "") {
+                    this.payloadTypesubmitButtonLabel = "date"
+                } else {
+                    this.payloadTypesubmitButtonLabel = "str"
+                }
+            } else if (this.payloadTypesubmitButtonLabel === 'string' || this.payloadTypesubmitButtonLabel === 'none') {
+                this.payloadTypesubmitButtonLabel = "str"
+            }
+
+            $("#node-input-payloadTypesubmitButtonLabel").val(this.payloadTypesubmitButtonLabel)
+            $("#node-input-submitButtonLabel").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypesubmitButtonLabel"),
+                types: ["str"]
+            })
+            $("#node-input-submitButtonLabel").typedInput("type", this.payloadTypesubmitButtonLabel)
+
+            if (this.payloadTypesubmitButtonColor === null) {
+                if (this.submitButtonColor === "") {
+                    this.payloadTypesubmitButtonColor = "date"
+                } else {
+                    this.payloadTypesubmitButtonColor = "str"
+                }
+            } else if (this.payloadTypesubmitButtonColor === 'string' || this.payloadTypesubmitButtonColor === 'none') {
+                this.payloadTypesubmitButtonColor = "str"
+            }
+
+            $("#node-input-payloadTypesubmitButtonColor").val(this.payloadTypesubmitButtonColor)
+            $("#node-input-submitButtonColor").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypesubmitButtonColor"),
+                types: ["str"]
+            })
+            $("#node-input-submitButtonColor").typedInput("type", this.payloadTypesubmitButtonColor)
+
+            if (this.payloadTypecancelButtonLabel === null) {
+                if (this.cancelButtonLabel === "") {
+                    this.payloadTypecancelButtonLabel = "date"
+                } else {
+                    this.payloadTypecancelButtonLabel = "str"
+                }
+            } else if (this.payloadTypecancelButtonLabel === 'string' || this.payloadTypecancelButtonLabel === 'none') {
+                this.payloadTypecancelButtonLabel = "str"
+            }
+
+            $("#node-input-payloadTypecancelButtonLabel").val(this.payloadTypecancelButtonLabel)
+            $("#node-input-cancelButtonLabel").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypecancelButtonLabel"),
+                types: ["str"]
+            })
+            $("#node-input-cancelButtonLabel").typedInput("type", this.payloadTypecancelButtonLabel)
+
+            if (this.payloadTypewidth === null) {
+                if (this.width === "") {
+                    this.payloadTypewidth = "date"
+                } else {
+                    this.payloadTypewidth = "num"
+                }
+            } else if (this.payloadTypewidth === 'string' || this.payloadTypewidth === 'none') {
+                this.payloadTypewidth = "num"
+            }
+
+            $("#node-input-payloadTypewidth").val(this.payloadTypewidth)
+            $("#node-input-width").typedInput({
+                default: "num",
+                typeField: $("#node-input-payloadTypewidth"),
+                types: ["num"]
+            })
+            $("#node-input-width").typedInput("type", this.payloadTypewidth)
+
+        },
+        oneditsave: function() {},
+        oneditcancel: function() {},
+        oneditdelete: function() {},
+        oneditresize: function() {},
+        onpaletteadd: function() {},
+        onpaletteremove: function() {}
+    });
+</script>
+
+<script type="text/html" data-template-name="dashboard-form">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-alias">Alias</label>
+        <input type="text" id="node-input-alias"></input>
+        <input type="hidden" id="node-input-payloadTypealias">
+    </div>
+    <div class="form-row">
+        <label for="node-input-config">Form fields</label>
+        <input type="text" id="node-input-config"></input>
+        <input type="hidden" id="node-input-payloadTypeconfig">
+    </div>
+    <div class="form-row">
+        <label for="node-input-submitButtonLabel">Sufieldsbmit button label</label>
+        <input type="text" id="node-input-submitButtonLabel"></input>
+        <input type="hidden" id="node-input-payloadTypesubmitButtonLabel">
+    </div>
+    <div class="form-row">
+        <label for="node-input-submitButtonColor">Submit button color</label>
+        <input type="text" id="node-input-submitButtonColor"></input>
+        <input type="hidden" id="node-input-payloadTypesubmitButtonColor">
+    </div>
+    <div class="form-row">
+        <label for="node-input-cancelButtonLabel">Cancel button label</label>
+        <input type="text" id="node-input-cancelButtonLabel"></input>
+        <input type="hidden" id="node-input-payloadTypecancelButtonLabel">
+    </div>
+    <div class="form-row">
+        <label for="node-input-width">Width</label>
+        <input type="text" id="node-input-width"></input>
+        <input type="hidden" id="node-input-payloadTypewidth">
+    </div>
+    <div class="form-row">
+        <label for="node-input-group">Group</label>
+        <input type="text" id="node-input-group"></input>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="dashboard-form">
+    <h2>Description</h2>
+    <p>Query opens tabs based on criteria like URL, muted status</p>
+
+    <h2>Config</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+
+
+    <h2>Outputs</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+</script>
