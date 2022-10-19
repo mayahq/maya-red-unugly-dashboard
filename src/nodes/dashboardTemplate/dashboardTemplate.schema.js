@@ -3,7 +3,7 @@ const {
     Schema,
     fields
 } = require('@mayahq/module-sdk')
-const { clients } = require('../../util/socket')
+const { clients, init, uiEventListener } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
 class DashboardTemplate extends Node {
@@ -42,17 +42,23 @@ class DashboardTemplate extends Node {
         }
 
         socks.forEach(sockId => {
-            const sock = clients[sockId]
-            if (!sock) {
-                return
+            try {
+                const sock = clients[sockId]
+                if (!sock) {
+                    return
+                }
+                sock.emit('dashboardDataUpdate', {
+                    componentType: 'TEMPLATE',
+                    componentId: `template:${this.redNode.id}`,
+                    event: msg.templateEvent,
+                    sockId: sockId
+                })
+            } catch (e) {
+                console.log('Unable to send template message', e)
             }
-            sock.emit('dashboardDataUpdate', {
-                componentType: 'TEMPLATE',
-                componentId: `template:${this.redNode.id}`,
-                event: msg.templateEvent,
-                sockId: sockId
-            })
         })
+
+        return null
     }
 }
 
