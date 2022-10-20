@@ -68,7 +68,7 @@ class DashboardForm extends Node {
             return null
         }
 
-        const tableEvent = {
+        const event = {
             type: 'POPULATE',
             data: dataToPopulate
         }
@@ -81,7 +81,7 @@ class DashboardForm extends Node {
             sock.emit('dashboardDataUpdate', {
                 componentType: 'FORM',
                 componentId: `form:${this.redNode.id}`,
-                event: tableEvent,
+                event: event,
                 sockId: sockId
             })
         })
