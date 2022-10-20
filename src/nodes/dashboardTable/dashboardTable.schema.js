@@ -40,7 +40,36 @@ class DashboardTable extends Node {
     }
 
     async onMessage(msg, vals) {
-        const tableEvent = msg.tableEvent
+        let tableEvent = msg.event
+        if (!tableEvent) {
+            if (Array.isArray(msg.payload)) {
+                try {
+                    const rows = msg.payload.map((data, idx) => {
+                        const row = {
+                            _identifier: {
+                                type: 'rowIndex',
+                                value: idx
+                            },
+                            fields: {}
+                        }
+
+                        Object.keys(data).forEach(fieldName => {
+                            row.fields[fieldName] = {
+                                type: typeof data[fieldName],
+                                value: data[fieldName]
+                            }
+                        })
+
+                        return row
+                    })
+
+                    tableEvent = {
+                        type: 'POPULATE',
+                        data: rows
+                    }
+                } catch (e) {}
+            }
+        }
 
         const _sockId = msg._sockId
         let socks = []
