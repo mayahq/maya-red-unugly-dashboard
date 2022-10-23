@@ -31,11 +31,10 @@
                 value: "str"
             },
             color: {
-                value: "",
-                required: false
+                value: "blue"
             },
-            payloadTypecolor: {
-                value: "str"
+            style: {
+                value: "solid"
             },
             loadingOnClick: {
                 value: "yes"
@@ -115,23 +114,17 @@
             })
             $("#node-input-tooltip").typedInput("type", this.payloadTypetooltip)
 
-            if (this.payloadTypecolor === null) {
-                if (this.color === "") {
-                    this.payloadTypecolor = "date"
-                } else {
-                    this.payloadTypecolor = "str"
-                }
-            } else if (this.payloadTypecolor === 'string' || this.payloadTypecolor === 'none') {
-                this.payloadTypecolor = "str"
-            }
-
-            $("#node-input-payloadTypecolor").val(this.payloadTypecolor)
-            $("#node-input-color").typedInput({
-                default: "str",
-                typeField: $("#node-input-payloadTypecolor"),
-                types: ["str"]
+            const colorselectFieldValues = ["blue", "gray", "green", "orange", "pink", "red", "teal", "yellow", "whiteAlpha", "facebook"]
+            colorselectFieldValues.forEach((val) => {
+                $("#node-input-color").append($("<option></option>").attr("value", val).text(val))
             })
-            $("#node-input-color").typedInput("type", this.payloadTypecolor)
+            $("#node-input-color").val(this.color)
+
+            const styleselectFieldValues = ["solid", "ghost", "outline"]
+            styleselectFieldValues.forEach((val) => {
+                $("#node-input-style").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-style").val(this.style)
 
             const loadingOnClickselectFieldValues = ["yes", "no"]
             loadingOnClickselectFieldValues.forEach((val) => {
@@ -189,8 +182,13 @@
     </div>
     <div class="form-row">
         <label for="node-input-color">Color</label>
-        <input type="text" id="node-input-color"></input>
-        <input type="hidden" id="node-input-payloadTypecolor">
+        <select type="text" id="node-input-color">
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-style">Style</label>
+        <select type="text" id="node-input-style">
+        </select>
     </div>
     <div class="form-row">
         <label for="node-input-loadingOnClick">Show loading on click</label>

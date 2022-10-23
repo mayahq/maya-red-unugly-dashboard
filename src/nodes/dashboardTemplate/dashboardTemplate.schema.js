@@ -20,7 +20,8 @@ class DashboardTemplate extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
-            templateType: new fields.Select({ options: ['email', 'text'], defaultVal: 'email', displayName: 'Type' }),
+            // templateType: new fields.Select({ options: ['email', 'text'], defaultVal: 'email', displayName: 'Type' }),
+            title: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Title", defaultVal: 'Template' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
             group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
         },
@@ -41,6 +42,16 @@ class DashboardTemplate extends Node {
             socks = Object.keys(clients)
         }
 
+        let templateEvent = msg.event
+        if (!templateEvent && typeof msg.payload === 'string') {
+            templateEvent = {
+                type: 'POPULATE',
+                data: {
+                    body: msg.payload
+                }
+            }
+        }
+
         socks.forEach(sockId => {
             try {
                 const sock = clients[sockId]
@@ -50,7 +61,7 @@ class DashboardTemplate extends Node {
                 sock.emit('dashboardDataUpdate', {
                     componentType: 'TEMPLATE',
                     componentId: `template:${this.redNode.id}`,
-                    event: msg.templateEvent,
+                    event: templateEvent,
                     sockId: sockId
                 })
             } catch (e) {

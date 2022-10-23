@@ -6,6 +6,33 @@ const {
 const { init, clients, uiEventListener } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
+const buttonColorOpts = [
+    'blue',
+    'gray',
+    'green',
+    'orange',
+    'pink',
+    'red',
+    'teal',
+    'yellow',
+    'whiteAlpha',
+    'facebook',
+    // 'blackAlpha',
+    // 'cyan',
+    // 'linkedin',
+    // 'messenger',
+    // 'purple',
+    // 'telegram',
+    // 'twitter',
+    // 'whatsapp',
+]
+
+const buttonStyles = [
+    'solid',
+    'ghost',
+    'outline',
+]
+
 class DashboardButton extends Node {
     constructor(node, RED, opts) {
         super(node, RED, {
@@ -23,8 +50,8 @@ class DashboardButton extends Node {
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 2 }),
             label: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Label", defaultVal: "Button" }),
             tooltip: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Tooltip", defaultVal: "" }),
-            color: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Color", defaultVal: "" }),
-            // loadingOnClick: new fields.Typed({ type: "bool", allowedTypes: ["bool"], displayName: "Show loading on click", defaultVal: true }),
+            color: new fields.Select({ options: buttonColorOpts, defaultVal: 'blue', displayName: 'Color' }),
+            style: new fields.Select({ options: buttonStyles, defaultVal: 'solid', displayName: 'Style' }),
             loadingOnClick: new fields.Select({ options: ['yes', 'no'], defaultVal: 'yes', displayName: "Show loading on click" }),
             payloadOnClick: new fields.Typed({
                 type: "flow", 
@@ -33,7 +60,6 @@ class DashboardButton extends Node {
                 defaultVal: "payload"
             }),
             group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' })
-            // Whatever custom fields the node needs.
         },
     })
 

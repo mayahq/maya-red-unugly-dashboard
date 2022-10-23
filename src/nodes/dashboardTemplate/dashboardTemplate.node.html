@@ -9,8 +9,12 @@
             isProfileConfigNode: {
                 value: false
             },
-            templateType: {
-                value: "email"
+            title: {
+                value: "Template",
+                required: false
+            },
+            payloadTypetitle: {
+                value: "str"
             },
             width: {
                 value: "8",
@@ -33,11 +37,23 @@
         paletteLabel: "dashboard-template",
         exportable: true,
         oneditprepare: function() {
-            const templateTypeselectFieldValues = ["email", "text"]
-            templateTypeselectFieldValues.forEach((val) => {
-                $("#node-input-templateType").append($("<option></option>").attr("value", val).text(val))
+            if (this.payloadTypetitle === null) {
+                if (this.title === "") {
+                    this.payloadTypetitle = "date"
+                } else {
+                    this.payloadTypetitle = "str"
+                }
+            } else if (this.payloadTypetitle === 'string' || this.payloadTypetitle === 'none') {
+                this.payloadTypetitle = "str"
+            }
+
+            $("#node-input-payloadTypetitle").val(this.payloadTypetitle)
+            $("#node-input-title").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypetitle"),
+                types: ["str"]
             })
-            $("#node-input-templateType").val(this.templateType)
+            $("#node-input-title").typedInput("type", this.payloadTypetitle)
 
             if (this.payloadTypewidth === null) {
                 if (this.width === "") {
@@ -73,9 +89,9 @@
         <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
     </div>
     <div class="form-row">
-        <label for="node-input-templateType">Type</label>
-        <select type="text" id="node-input-templateType">
-        </select>
+        <label for="node-input-title">Title</label>
+        <input type="text" id="node-input-title"></input>
+        <input type="hidden" id="node-input-payloadTypetitle">
     </div>
     <div class="form-row">
         <label for="node-input-width">Width</label>
