@@ -32,9 +32,15 @@ class DashboardTable extends Node {
         uiEventListener.on(`table:${this.redNode.id}`, ({ event, _sockId }) => {
             const { rowData } = event
             const payload = {}
-            Object.keys(rowData.fields).forEach(key => {
-                payload[key] = rowData[key].value
-            })
+            try {
+                Object.keys(rowData.fields).forEach(key => {
+                    payload[key] = rowData.fields[key].value
+                })
+            } catch (e) {
+                // We don't know what'll be in rowData. We don't wanna crash the
+                // runtime in case of bad data, so this is a blanket try-catch
+            }
+
             this.redNode.send({ rowData: [rowData], payload, _sockId })
         })
     }
