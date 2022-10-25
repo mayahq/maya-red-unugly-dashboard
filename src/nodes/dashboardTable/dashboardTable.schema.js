@@ -32,7 +32,7 @@ class DashboardTable extends Node {
         uiEventListener.on(`table:${this.redNode.id}`, ({ event, _sockId }) => {
             const { rowData } = event
             const payload = {}
-            Object.keys(rowData).forEach(key => {
+            Object.keys(rowData.fields).forEach(key => {
                 payload[key] = rowData[key].value
             })
             this.redNode.send({ rowData: [rowData], payload, _sockId })
@@ -44,7 +44,7 @@ class DashboardTable extends Node {
         if (msg.event && msg.event.componentType === 'TABLE') {
             tableEvent = msg.event
         }
-        
+
         if (!tableEvent) {
             if (Array.isArray(msg.rowData)) {
                 tableEvent = {
