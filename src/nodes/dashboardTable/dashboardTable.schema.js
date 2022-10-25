@@ -42,7 +42,12 @@ class DashboardTable extends Node {
     async onMessage(msg, vals) {
         let tableEvent = msg.event
         if (!tableEvent) {
-            if (Array.isArray(msg.payload)) {
+            if (Array.isArray(msg.rowData)) {
+                tableEvent = {
+                    type: 'POPULATE',
+                    data: msg.rowData
+                }
+            } else if (Array.isArray(msg.payload)) {
                 try {
                     const rows = msg.payload.map((data, idx) => {
                         const row = {
