@@ -40,7 +40,11 @@ class DashboardTable extends Node {
     }
 
     async onMessage(msg, vals) {
-        let tableEvent = msg.event
+        let tableEvent = null
+        if (msg.event && msg.event.componentType === 'TABLE') {
+            tableEvent = msg.event
+        }
+        
         if (!tableEvent) {
             if (Array.isArray(msg.rowData)) {
                 tableEvent = {
