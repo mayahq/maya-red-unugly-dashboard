@@ -27,6 +27,13 @@
                 value: "",
                 type: "dashboard-group"
             },
+            truncateAfter: {
+                value: "-1",
+                required: false
+            },
+            payloadTypetruncateAfter: {
+                value: "num"
+            },
         },
         inputs: 1,
         outputs: 1,
@@ -73,6 +80,24 @@
             })
             $("#node-input-width").typedInput("type", this.payloadTypewidth)
 
+            if (this.payloadTypetruncateAfter === null) {
+                if (this.truncateAfter === "") {
+                    this.payloadTypetruncateAfter = "date"
+                } else {
+                    this.payloadTypetruncateAfter = "num"
+                }
+            } else if (this.payloadTypetruncateAfter === 'string' || this.payloadTypetruncateAfter === 'none') {
+                this.payloadTypetruncateAfter = "num"
+            }
+
+            $("#node-input-payloadTypetruncateAfter").val(this.payloadTypetruncateAfter)
+            $("#node-input-truncateAfter").typedInput({
+                default: "num",
+                typeField: $("#node-input-payloadTypetruncateAfter"),
+                types: ["num"]
+            })
+            $("#node-input-truncateAfter").typedInput("type", this.payloadTypetruncateAfter)
+
         },
         oneditsave: function() {},
         oneditcancel: function() {},
@@ -101,6 +126,11 @@
     <div class="form-row">
         <label for="node-input-group">Group</label>
         <input type="text" id="node-input-group"></input>
+    </div>
+    <div class="form-row">
+        <label for="node-input-truncateAfter">truncateAfter</label>
+        <input type="text" id="node-input-truncateAfter"></input>
+        <input type="hidden" id="node-input-payloadTypetruncateAfter">
     </div>
 </script>
 

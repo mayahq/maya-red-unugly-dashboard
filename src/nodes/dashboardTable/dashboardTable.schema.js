@@ -22,7 +22,8 @@ class DashboardTable extends Node {
         fields: {
             alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myTable' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' })
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
+            truncateAfter: new fields.Typed({ type: "num", allowedTypes: ["num"], display: "Truncate after", defaultVal: -1 })
             // Whatever custom fields the node needs.
         },
     })
