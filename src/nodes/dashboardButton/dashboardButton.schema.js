@@ -54,8 +54,8 @@ class DashboardButton extends Node {
             style: new fields.Select({ options: buttonStyles, defaultVal: 'solid', displayName: 'Style' }),
             loadingOnClick: new fields.Select({ options: ['yes', 'no'], defaultVal: 'yes', displayName: "Show loading on click" }),
             payloadOnClick: new fields.Typed({
-                type: "flow", 
-                allowedTypes: ["msg", "flow", "global", "str", "num", "boolean", "json"], 
+                type: "str", 
+                allowedTypes: ["msg", "flow", "global", "str", "num", "bool", "json"], 
                 displayName: "Payload to send on click", 
                 defaultVal: "payload"
             }),
@@ -67,7 +67,23 @@ class DashboardButton extends Node {
         init(this.RED.server, this.RED.settings)
 
         uiEventListener.on(`button:${this.redNode.id}`, ({ event, _sockId }) => {
-            this.redNode.send({ event, _sockId })
+            console.log('redNode', this.constructor.schema.fields.payloadOnClick)
+            let payloadVal = null
+            try {
+                const schema = this.constructor.schema
+                const val = schema.fields.payloadOnClick.resolveValue(
+                    this.RED, 
+                    'payloadOnClick',
+                    this.redNode,
+                    null,
+                    {}
+                )
+                payloadVal = val
+            } catch (e) {
+                console.log('Unable to resolve payload value', e)
+            }
+
+            this.redNode.send({ event, _sockId, payload: payloadVal })
         })
     }
 

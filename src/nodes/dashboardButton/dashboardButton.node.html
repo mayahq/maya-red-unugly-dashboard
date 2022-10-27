@@ -44,7 +44,7 @@
                 required: false
             },
             payloadTypepayloadOnClick: {
-                value: "flow"
+                value: "str"
             },
             group: {
                 value: "",
@@ -136,17 +136,17 @@
                 if (this.payloadOnClick === "") {
                     this.payloadTypepayloadOnClick = "date"
                 } else {
-                    this.payloadTypepayloadOnClick = "flow"
+                    this.payloadTypepayloadOnClick = "str"
                 }
             } else if (this.payloadTypepayloadOnClick === 'string' || this.payloadTypepayloadOnClick === 'none') {
-                this.payloadTypepayloadOnClick = "flow"
+                this.payloadTypepayloadOnClick = "str"
             }
 
             $("#node-input-payloadTypepayloadOnClick").val(this.payloadTypepayloadOnClick)
             $("#node-input-payloadOnClick").typedInput({
-                default: "flow",
+                default: "str",
                 typeField: $("#node-input-payloadTypepayloadOnClick"),
-                types: ["msg", "flow", "global", "str", "num", "boolean", "json"]
+                types: ["msg", "flow", "global", "str", "num", "bool", "json"]
             })
             $("#node-input-payloadOnClick").typedInput("type", this.payloadTypepayloadOnClick)
 
