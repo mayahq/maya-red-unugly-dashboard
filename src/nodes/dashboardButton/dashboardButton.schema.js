@@ -67,7 +67,6 @@ class DashboardButton extends Node {
         init(this.RED.server, this.RED.settings)
 
         uiEventListener.on(`button:${this.redNode.id}`, ({ event, _sockId }) => {
-            console.log('redNode', this.constructor.schema.fields.payloadOnClick)
             let payloadVal = null
             try {
                 const schema = this.constructor.schema
