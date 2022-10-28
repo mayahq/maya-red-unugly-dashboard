@@ -3,6 +3,8 @@ const {
     Schema,
     fields
 } = require('@mayahq/module-sdk')
+const Mustache = require('mustache')
+
 const { clients, init, uiEventListener } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
@@ -20,20 +22,39 @@ class DashboardTemplate extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
-            // templateType: new fields.Select({ options: ['email', 'text'], defaultVal: 'email', displayName: 'Type' }),
             title: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Title", defaultVal: 'Template' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
+            templateBody: new fields.Typed({ type: "str", allowedTypes: ['str', 'msg', 'flow'], defaultVal: "hello", displayName: 'Template' }),
+            values: new fields.Typed({ type: 'msg', allowedTypes: ['json', 'msg', 'flow'], defaultVal: 'payload', displayName: 'Variables' }),
+            renderInDashboard: new fields.Select({ options: ['yes', 'no'], defaultVal: 'yes', displayName: 'Show in dashboard' }),
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group', required: false }),
         },
 
     })
 
     onInit() {
         init(this.RED.server, this.RED.settings)
-        // Do something on initialization of node
     }
 
     async onMessage(msg, vals) {
+        let output = 'Error rendering template'
+
+        try {
+            const template = vals.templateBody
+            output = Mustache.render(template, vals.values || {})
+        } catch (e) {
+            console.log('Error rendering template:', e)
+        }
+
+        if (vals.renderInDashboard === 'no') {
+            msg.templateValue = output
+            return msg
+        }
+
+        /**
+         * If the template is to be rendered in the dashboard, we need
+         * need to send back the output in a message
+         */
         const _sockId = msg._sockId
         let socks = []
         if (_sockId) {
@@ -42,13 +63,11 @@ class DashboardTemplate extends Node {
             socks = Object.keys(clients)
         }
 
-        let templateEvent = msg.event
-        if (!templateEvent && typeof msg.payload === 'string') {
-            templateEvent = {
-                type: 'POPULATE',
-                data: {
-                    body: msg.payload
-                }
+        const templateEvent = {
+            type: 'POPULATE',
+            componentType: 'TEMPLATE',
+            data: {
+                body: output
             }
         }
 

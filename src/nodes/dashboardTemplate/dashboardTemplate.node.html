@@ -23,9 +23,27 @@
             payloadTypewidth: {
                 value: "num"
             },
+            templateBody: {
+                value: "hello",
+                required: false
+            },
+            payloadTypetemplateBody: {
+                value: "str"
+            },
+            values: {
+                value: "payload",
+                required: false
+            },
+            payloadTypevalues: {
+                value: "msg"
+            },
+            renderInDashboard: {
+                value: "yes"
+            },
             group: {
                 value: "",
-                type: "dashboard-group"
+                type: "dashboard-group",
+                required: false
             },
         },
         inputs: 1,
@@ -73,6 +91,48 @@
             })
             $("#node-input-width").typedInput("type", this.payloadTypewidth)
 
+            if (this.payloadTypetemplateBody === null) {
+                if (this.templateBody === "") {
+                    this.payloadTypetemplateBody = "date"
+                } else {
+                    this.payloadTypetemplateBody = "str"
+                }
+            } else if (this.payloadTypetemplateBody === 'string' || this.payloadTypetemplateBody === 'none') {
+                this.payloadTypetemplateBody = "str"
+            }
+
+            $("#node-input-payloadTypetemplateBody").val(this.payloadTypetemplateBody)
+            $("#node-input-templateBody").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypetemplateBody"),
+                types: ["str", "msg", "flow"]
+            })
+            $("#node-input-templateBody").typedInput("type", this.payloadTypetemplateBody)
+
+            if (this.payloadTypevalues === null) {
+                if (this.values === "") {
+                    this.payloadTypevalues = "date"
+                } else {
+                    this.payloadTypevalues = "msg"
+                }
+            } else if (this.payloadTypevalues === 'string' || this.payloadTypevalues === 'none') {
+                this.payloadTypevalues = "msg"
+            }
+
+            $("#node-input-payloadTypevalues").val(this.payloadTypevalues)
+            $("#node-input-values").typedInput({
+                default: "msg",
+                typeField: $("#node-input-payloadTypevalues"),
+                types: ["json", "msg", "flow"]
+            })
+            $("#node-input-values").typedInput("type", this.payloadTypevalues)
+
+            const renderInDashboardselectFieldValues = ["yes", "no"]
+            renderInDashboardselectFieldValues.forEach((val) => {
+                $("#node-input-renderInDashboard").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-renderInDashboard").val(this.renderInDashboard)
+
         },
         oneditsave: function() {},
         oneditcancel: function() {},
@@ -97,6 +157,21 @@
         <label for="node-input-width">Width</label>
         <input type="text" id="node-input-width"></input>
         <input type="hidden" id="node-input-payloadTypewidth">
+    </div>
+    <div class="form-row">
+        <label for="node-input-templateBody">Template</label>
+        <input type="text" id="node-input-templateBody"></input>
+        <input type="hidden" id="node-input-payloadTypetemplateBody">
+    </div>
+    <div class="form-row">
+        <label for="node-input-values">Variables</label>
+        <input type="text" id="node-input-values"></input>
+        <input type="hidden" id="node-input-payloadTypevalues">
+    </div>
+    <div class="form-row">
+        <label for="node-input-renderInDashboard">Show in dashboard</label>
+        <select type="text" id="node-input-renderInDashboard">
+        </select>
     </div>
     <div class="form-row">
         <label for="node-input-group">Group</label>
