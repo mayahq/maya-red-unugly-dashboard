@@ -53,12 +53,11 @@ class DashboardTable extends Node {
         }
 
         if (!tableEvent) {
-            if (Array.isArray(msg.rowData)) {
-                tableEvent = {
-                    type: 'POPULATE',
-                    data: msg.rowData
-                }
-            } else if (Array.isArray(msg.payload)) {
+            /**
+             * Prioritizing msg.payload over msg.rowData for now because the
+             * JSONSQL node gives out results in payload instead of rowData.
+             */
+            if (Array.isArray(msg.payload)) {
                 try {
                     const rows = msg.payload.map((data, idx) => {
                         const row = {
@@ -84,6 +83,11 @@ class DashboardTable extends Node {
                         data: rows
                     }
                 } catch (e) {}
+            } else if (Array.isArray(msg.rowData)) {
+                tableEvent = {
+                    type: 'POPULATE',
+                    data: msg.rowData
+                }
             }
         }
 
