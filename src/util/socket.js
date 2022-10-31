@@ -24,7 +24,7 @@ function init(server, redSettings) {
             methods: ["GET", "POST"]
         }
     })
-    console.log('Creating socket on server', io, server)
+    console.log('Creating socket on server')
     io.on('connection', socket => {
         console.log('got connection')
         clients[socket.id] = socket

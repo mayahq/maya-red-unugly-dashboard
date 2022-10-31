@@ -1,0 +1,153 @@
+<script type='text/javascript'>
+    RED.nodes.registerType("dashboard-notification", {
+        category: "Maya Red Unugly Dashboard",
+        color: "#8BBDD9",
+        defaults: {
+            name: {
+                value: ""
+            },
+            isProfileConfigNode: {
+                value: false
+            },
+            title: {
+                value: "Title",
+                required: false
+            },
+            payloadTypetitle: {
+                value: "str"
+            },
+            description: {
+                value: "This is the notification description",
+                required: false
+            },
+            payloadTypedescription: {
+                value: "str"
+            },
+            status: {
+                value: "info"
+            },
+            position: {
+                value: "top-right"
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "fa-file-code-o.png",
+        label: function() {
+            return this.name || "dashboard-notification"
+        },
+        paletteLabel: "dashboard-notification",
+        exportable: true,
+        oneditprepare: function() {
+            if (this.payloadTypetitle === null) {
+                if (this.title === "") {
+                    this.payloadTypetitle = "date"
+                } else {
+                    this.payloadTypetitle = "str"
+                }
+            } else if (this.payloadTypetitle === 'string' || this.payloadTypetitle === 'none') {
+                this.payloadTypetitle = "str"
+            }
+
+            $("#node-input-payloadTypetitle").val(this.payloadTypetitle)
+            $("#node-input-title").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypetitle"),
+                types: ["str", "msg", "flow", "global"]
+            })
+            $("#node-input-title").typedInput("type", this.payloadTypetitle)
+
+            if (this.payloadTypedescription === null) {
+                if (this.description === "") {
+                    this.payloadTypedescription = "date"
+                } else {
+                    this.payloadTypedescription = "str"
+                }
+            } else if (this.payloadTypedescription === 'string' || this.payloadTypedescription === 'none') {
+                this.payloadTypedescription = "str"
+            }
+
+            $("#node-input-payloadTypedescription").val(this.payloadTypedescription)
+            $("#node-input-description").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypedescription"),
+                types: ["str", "msg", "flow", "global"]
+            })
+            $("#node-input-description").typedInput("type", this.payloadTypedescription)
+
+            const statusselectFieldValues = ["error", "info", "success", "warning"]
+            statusselectFieldValues.forEach((val) => {
+                $("#node-input-status").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-status").val(this.status)
+
+            const positionselectFieldValues = ["bottom", "bottom-left", "bottom-right", "top", "top-left", "top-right"]
+            positionselectFieldValues.forEach((val) => {
+                $("#node-input-position").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-position").val(this.position)
+
+        },
+        oneditsave: function() {},
+        oneditcancel: function() {},
+        oneditdelete: function() {},
+        oneditresize: function() {},
+        onpaletteadd: function() {},
+        onpaletteremove: function() {}
+    });
+</script>
+
+<script type="text/html" data-template-name="dashboard-notification">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-title">Title</label>
+        <input type="text" id="node-input-title"></input>
+        <input type="hidden" id="node-input-payloadTypetitle">
+    </div>
+    <div class="form-row">
+        <label for="node-input-description">Description</label>
+        <input type="text" id="node-input-description"></input>
+        <input type="hidden" id="node-input-payloadTypedescription">
+    </div>
+    <div class="form-row">
+        <label for="node-input-status">Status</label>
+        <select type="text" id="node-input-status">
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-position">Position</label>
+        <select type="text" id="node-input-position">
+        </select>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="dashboard-notification">
+    <h2>Description</h2>
+    <p>Query opens tabs based on criteria like URL, muted status</p>
+
+    <h2>Config</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+
+
+    <h2>Outputs</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+</script>

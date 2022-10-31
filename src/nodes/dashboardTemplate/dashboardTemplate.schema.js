@@ -39,16 +39,17 @@ class DashboardTemplate extends Node {
     async onMessage(msg, vals) {
         let output = 'Error rendering template'
 
-        try {
-            const template = vals.templateBody
-            output = Mustache.render(template, vals.values || {})
-        } catch (e) {
-            console.log('Error rendering template:', e)
-        }
-
         if (vals.renderInDashboard === 'no') {
-            msg.templateValue = output
-            return msg
+            try {
+                const template = vals.templateBody
+                output = Mustache.render(template, vals.values || {})
+                msg.templateValue = output
+                return msg
+            } catch (e) {
+                console.log('Error rendering template:', e)
+            }
+
+            return
         }
 
         /**
@@ -67,7 +68,8 @@ class DashboardTemplate extends Node {
             type: 'POPULATE',
             componentType: 'TEMPLATE',
             data: {
-                body: output
+                body: vals.templateBody,
+                variables: vals.values
             }
         }
 
