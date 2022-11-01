@@ -91,6 +91,18 @@ class DashboardTable extends Node {
             }
         }
 
+        /**
+         * Maintaining table context
+         */
+        const flowContext = this.redNode.context().flow
+        if (tableEvent.type === 'POPULATE') {
+            const key = `table:${vals.alias}`
+            const tableData = flowContext.get(key) || {}
+            const newTableData = { ...tableData, rows: tableEvent.data }
+
+            flowContext.set(key, newTableData)
+        }
+
         const _sockId = msg._sockId
         let socks = []
         if (_sockId) {
