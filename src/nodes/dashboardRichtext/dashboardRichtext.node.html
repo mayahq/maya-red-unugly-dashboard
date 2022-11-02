@@ -1,0 +1,148 @@
+<script type='text/javascript'>
+    RED.nodes.registerType("dashboard-richtext", {
+        category: "Maya Red Unugly Dashboard",
+        color: "#8BBDD9",
+        defaults: {
+            name: {
+                value: ""
+            },
+            isProfileConfigNode: {
+                value: false
+            },
+            outputFormat: {
+                value: "html"
+            },
+            width: {
+                value: "8",
+                required: false
+            },
+            payloadTypewidth: {
+                value: "num"
+            },
+            group: {
+                value: "",
+                type: "dashboard-group",
+                required: true
+            },
+            debounceBy: {
+                value: "400",
+                required: false
+            },
+            payloadTypedebounceBy: {
+                value: "num"
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "fa-file-code-o.png",
+        label: function() {
+            return this.name || "dashboard-richtext"
+        },
+        paletteLabel: "dashboard-richtext",
+        exportable: true,
+        oneditprepare: function() {
+            const outputFormatselectFieldValues = ["html", "markdown", "plaintext"]
+            outputFormatselectFieldValues.forEach((val) => {
+                $("#node-input-outputFormat").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-outputFormat").val(this.outputFormat)
+
+            if (this.payloadTypewidth === null) {
+                if (this.width === "") {
+                    this.payloadTypewidth = "date"
+                } else {
+                    this.payloadTypewidth = "num"
+                }
+            } else if (this.payloadTypewidth === 'string' || this.payloadTypewidth === 'none') {
+                this.payloadTypewidth = "num"
+            }
+
+            $("#node-input-payloadTypewidth").val(this.payloadTypewidth)
+            $("#node-input-width").typedInput({
+                default: "num",
+                typeField: $("#node-input-payloadTypewidth"),
+                types: ["num"]
+            })
+            $("#node-input-width").typedInput("type", this.payloadTypewidth)
+
+            if (this.payloadTypedebounceBy === null) {
+                if (this.debounceBy === "") {
+                    this.payloadTypedebounceBy = "date"
+                } else {
+                    this.payloadTypedebounceBy = "num"
+                }
+            } else if (this.payloadTypedebounceBy === 'string' || this.payloadTypedebounceBy === 'none') {
+                this.payloadTypedebounceBy = "num"
+            }
+
+            $("#node-input-payloadTypedebounceBy").val(this.payloadTypedebounceBy)
+            $("#node-input-debounceBy").typedInput({
+                default: "num",
+                typeField: $("#node-input-payloadTypedebounceBy"),
+                types: ["num"]
+            })
+            $("#node-input-debounceBy").typedInput("type", this.payloadTypedebounceBy)
+
+        },
+        oneditsave: function() {},
+        oneditcancel: function() {},
+        oneditdelete: function() {},
+        oneditresize: function() {},
+        onpaletteadd: function() {},
+        onpaletteremove: function() {}
+    });
+</script>
+
+<script type="text/html" data-template-name="dashboard-richtext">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-outputFormat">Output format</label>
+        <select type="text" id="node-input-outputFormat">
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-width">Width</label>
+        <input type="text" id="node-input-width"></input>
+        <input type="hidden" id="node-input-payloadTypewidth">
+    </div>
+    <div class="form-row">
+        <label for="node-input-group">Group</label>
+        <input type="text" id="node-input-group"></input>
+    </div>
+    <div class="form-row">
+        <label for="node-input-debounceBy">Time to wait before msg is sent</label>
+        <input type="text" id="node-input-debounceBy"></input>
+        <input type="hidden" id="node-input-payloadTypedebounceBy">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="dashboard-richtext">
+    <h2>Description</h2>
+    <p>Query opens tabs based on criteria like URL, muted status</p>
+
+    <h2>Config</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+
+
+    <h2>Outputs</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+</script>
