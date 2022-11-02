@@ -136,15 +136,33 @@ class DashboardTable extends Node {
         }
 
         /**
-         * Maintaining table context
+         * Maintaining table data in context
          */
         const flowContext = this.redNode.context().flow
-        if (tableEvent.type === 'POPULATE') {
-            const key = `table:${vals.alias}`
-            const tableData = flowContext.get(key) || {}
-            const newTableData = { ...tableData, rows: tableEvent.data, selected: {} }
+        const key = `table:${vals.alias}`
+        const tableData = flowContext.get(key) || {}
 
+        if (tableEvent.type === 'POPULATE') {
+            const newTableData = { ...tableData, rows: tableEvent.data, selected: {} }
             flowContext.set(key, newTableData)
+        }
+        if (tableEvent.type === 'ADD_ROWS') {
+            let newRows = tableData.rows || []
+            newRows = newRows.concat(tableEvent.data)
+            const newTableData = { ...tableData, rows: newRows }
+            flowContext.set(key, newTableData)
+        }
+        if (tableEvent.type === 'UPSERT_ROWS') {
+            const currentRows = tableData.rows || []
+            tableEvent.data.forEach(row => {
+                const tableRow = currentRows.find(r => r._identifier.value === row._identifier.value)
+                if (!tableRow) {
+                    return currentRows.push(row)
+                }
+
+                Object.keys(row.fields).forEach(key => tableRow.fields[key] = row.fields[key])
+            })
+            flowContext.set(key, { ...tableData, rows: currentRows })
         }
 
         const _sockId = msg._sockId
