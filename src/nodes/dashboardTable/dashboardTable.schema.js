@@ -31,18 +31,62 @@ class DashboardTable extends Node {
     onInit() {
         init(this.RED.server, this.RED.settings)
         uiEventListener.on(`table:${this.redNode.id}`, ({ event, _sockId }) => {
-            const { rowData } = event
-            const payload = {}
-            try {
-                Object.keys(rowData.fields).forEach(key => {
-                    payload[key] = rowData.fields[key].value
-                })
-            } catch (e) {
-                // We don't know what'll be in rowData. We don't wanna crash the
-                // runtime in case of bad data, so this is a blanket try-catch
-            }
+            const schema = this.constructor.schema
+            const alias = schema.fields.alias.resolveValue(
+                this.RED, 
+                'alias',
+                this.redNode,
+                null,
+                {}
+            )
 
-            this.redNode.send({ rowData: [rowData], payload, _sockId })
+            switch (event.type) {
+                case 'rowClick': {
+                    const { rowData } = event
+                    const payload = {}
+                    try {
+                        Object.keys(rowData.fields).forEach(key => {
+                            payload[key] = rowData.fields[key].value
+                        })
+                    } catch (e) {
+                        // We don't know what'll be in rowData. We don't wanna crash the
+                        // runtime in case of bad data, so this is a blanket try-catch
+                    }
+        
+                    this.redNode.send({ rowData: [rowData], payload, _sockId })
+                    break
+                }
+                case 'rowSelect': {
+                    try {
+                        const { rowIdentifier, selected } = event
+                        const flowContext = this.redNode.context().flow
+                        const key = `table:${alias}`
+    
+                        const tableData = flowContext.get(key) || {}
+                        let selectedRows = tableData.selected || {}
+                        if (rowIdentifier === 'all') {
+                            if (!selected) {
+                                selectedRows = {}
+                            } else {
+                                const presentRows = tableData.rows
+                                presentRows.forEach((row) => selectedRows[row._identifier.value] = true)
+                            }
+                        } else {
+                            if (!selected) {
+                                delete selectedRows[rowIdentifier]
+                            } else {
+                                selectedRows[rowIdentifier] = true
+                            }
+                        }
+    
+                        tableData.selected = selectedRows
+                        flowContext.set(key, tableData)
+                    } catch (e) {
+                        console.log('Error updating selected rows in table context data')
+                        // Don't want bad data to crash the entire runtime
+                    }
+                }
+            }
         })
     }
 
@@ -98,7 +142,7 @@ class DashboardTable extends Node {
         if (tableEvent.type === 'POPULATE') {
             const key = `table:${vals.alias}`
             const tableData = flowContext.get(key) || {}
-            const newTableData = { ...tableData, rows: tableEvent.data }
+            const newTableData = { ...tableData, rows: tableEvent.data, selected: {} }
 
             flowContext.set(key, newTableData)
         }
