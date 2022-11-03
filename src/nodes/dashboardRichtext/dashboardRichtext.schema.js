@@ -46,7 +46,7 @@ class DashboardRichtext extends Node {
 
             const { body, format } = event
             const flowContext = this.redNode.context().flow
-            const key = `richtext:${alias}`
+            const key = `richtext_${alias}`
             flowContext.set(key, { body, format })
 
             this.redNode.send({ body: body, payload: body, _sockId })

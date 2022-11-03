@@ -60,7 +60,7 @@ class DashboardTable extends Node {
                     try {
                         const { rowIdentifier, selected } = event
                         const flowContext = this.redNode.context().flow
-                        const key = `table:${alias}`
+                        const key = `table_${alias}`
     
                         const tableData = flowContext.get(key) || {}
                         let selectedRows = tableData.selected || {}
@@ -139,7 +139,7 @@ class DashboardTable extends Node {
          * Maintaining table data in context
          */
         const flowContext = this.redNode.context().flow
-        const key = `table:${vals.alias}`
+        const key = `table_${vals.alias}`
         const tableData = flowContext.get(key) || {}
 
         if (tableEvent.type === 'POPULATE') {
