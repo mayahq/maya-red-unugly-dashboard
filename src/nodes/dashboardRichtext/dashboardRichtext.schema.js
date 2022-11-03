@@ -77,6 +77,13 @@ class DashboardRichtext extends Node {
             socks = Object.keys(clients)
         }
 
+        const flowContext = this.redNode.context().flow
+        const key = `richtext_${vals.alias}`
+        flowContext.set(key, { 
+            body: richtextEvent?.body,
+            format: 'html'
+        })
+
         socks.forEach(sockId => {
             const sock = clients[sockId]
             if (!sock) {
