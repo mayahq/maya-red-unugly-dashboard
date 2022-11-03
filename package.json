@@ -44,7 +44,7 @@
     }
   },
   "dependencies": {
-    "@mayahq/module-sdk": "^2.2.4",
+    "@mayahq/module-sdk": "^2.2.5",
     "moustache": "^0.0.4",
     "mustache": "^4.2.0",
     "socket.io": "^4.5.3"
