@@ -6,6 +6,25 @@ const {
 const { init, clients, uiEventListener } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
+const colorSchemeOpts = [
+    'blue',
+    'gray',
+    'green',
+    'orange',
+    'pink',
+    'red',
+    'teal',
+    'yellow'
+    // 'blackAlpha',
+    // 'cyan',
+    // 'linkedin',
+    // 'messenger',
+    // 'purple',
+    // 'telegram',
+    // 'twitter',
+    // 'whatsapp',
+]
+
 class DashboardTable extends Node {
     constructor(node, RED, opts) {
         super(node, RED, {
@@ -25,6 +44,7 @@ class DashboardTable extends Node {
             group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             truncateAfter: new fields.Typed({ type: "num", allowedTypes: ["num"], display: "Truncate after", defaultVal: -1 }),
             actionButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Action button label", defaultVal: 'Process' }),
+            colorScheme: new fields.Select({ options: colorSchemeOpts, defaultVal: 'blue', displayName: 'Color scheme' })
             // Whatever custom fields the node needs.
         },
     })
