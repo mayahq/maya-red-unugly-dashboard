@@ -100,6 +100,7 @@ class DashboardRichtext extends Node {
             group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             passthru: new fields.Typed({type: 'bool', allowedTypes:["bool"], displayName: 'Output on change', defaultVal: "false"}),
             debounceBy: new fields.Typed({ type: 'num', allowedTypes: ['num'], defaultVal: 400, displayName: 'Time to wait before msg is sent'}),
+            inputData: new fields.Typed({ type: "msg", allowedTypes: ["msg", "flow", "global"], defaultVal: "payload", displayName: "Editable data"})
         },
 
     })
@@ -121,7 +122,7 @@ class DashboardRichtext extends Node {
             const alias = this.getFieldValue('alias')
             const passthru = this.getFieldValue('passthru')
             const outputFormat = this.redNode.outputFormat
-            const { body, format } = event
+            const { body } = event
             let outputBody;
             switch (outputFormat) {
 				case 'html': {
@@ -147,9 +148,12 @@ class DashboardRichtext extends Node {
 
             const flowContext = this.redNode.context().flow
             const key = `richtext_${alias}`
-            flowContext.set(key, { body: outputBody, format })
-            if(passthru)
-                this.redNode.send({ body: outputBody, payload: outputBody, _sockId })
+            const context = flowContext.get(key)
+            let modfiedContext = {...context, body: outputBody, payload: outputBody}
+            flowContext.set(key, modfiedContext)
+            if(passthru){
+                this.redNode.send({ ...modfiedContext, _sockId })
+            }
         })
     }
 
@@ -160,15 +164,15 @@ class DashboardRichtext extends Node {
         }
 
         if (!richtextEvent) {
-            if (typeof msg.payload === 'string') {
+            if (typeof vals.inputData === 'string') {
                 richtextEvent = {
                     componentType: 'RICHTEXT',
                     type: 'POPULATE',
-                    body: `${renderRichText(msg.payload, vals.inputFormat)}`
+                    body: `${renderRichText(vals.inputData, vals.inputFormat)}`
                 }
             }
         }
-
+        
         const _sockId = msg._sockId
         let socks = []
         if (_sockId) {
@@ -179,10 +183,10 @@ class DashboardRichtext extends Node {
 
         const flowContext = this.redNode.context().flow
         const key = `richtext_${vals.alias}`
-        flowContext.set(key, { 
-            body: richtextEvent?.body,
-            format: 'html'
-        })
+        const context = flowContext.get(key) || {}
+        let modfiedContext = {...context, ...msg}
+        
+        flowContext.set(key, modfiedContext)
 
         socks.forEach(sockId => {
             const sock = clients[sockId]

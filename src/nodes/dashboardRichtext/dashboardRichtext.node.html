@@ -48,6 +48,13 @@
             payloadTypedebounceBy: {
                 value: "num"
             },
+            inputData: {
+                value: "payload",
+                required: false
+            },
+            payloadTypeinputData: {
+                value: "msg"
+            },
         },
         inputs: 1,
         outputs: 1,
@@ -142,6 +149,24 @@
             })
             $("#node-input-debounceBy").typedInput("type", this.payloadTypedebounceBy)
 
+            if (this.payloadTypeinputData === null) {
+                if (this.inputData === "") {
+                    this.payloadTypeinputData = "date"
+                } else {
+                    this.payloadTypeinputData = "msg"
+                }
+            } else if (this.payloadTypeinputData === 'string' || this.payloadTypeinputData === 'none') {
+                this.payloadTypeinputData = "msg"
+            }
+
+            $("#node-input-payloadTypeinputData").val(this.payloadTypeinputData)
+            $("#node-input-inputData").typedInput({
+                default: "msg",
+                typeField: $("#node-input-payloadTypeinputData"),
+                types: ["msg", "flow", "global"]
+            })
+            $("#node-input-inputData").typedInput("type", this.payloadTypeinputData)
+
         },
         oneditsave: function() {},
         oneditcancel: function() {},
@@ -190,6 +215,11 @@
         <label for="node-input-debounceBy">Time to wait before msg is sent</label>
         <input type="text" id="node-input-debounceBy"></input>
         <input type="hidden" id="node-input-payloadTypedebounceBy">
+    </div>
+    <div class="form-row">
+        <label for="node-input-inputData">Editable data</label>
+        <input type="text" id="node-input-inputData"></input>
+        <input type="hidden" id="node-input-payloadTypeinputData">
     </div>
 </script>
 
