@@ -45,8 +45,11 @@
   },
   "dependencies": {
     "@mayahq/module-sdk": "^2.2.5",
+    "html-to-text": "^8.2.1",
+    "marked": "^4.2.1",
     "moustache": "^0.0.4",
     "mustache": "^4.2.0",
-    "socket.io": "^4.5.3"
+    "socket.io": "^4.5.3",
+    "turndown": "^7.1.1"
   }
 }

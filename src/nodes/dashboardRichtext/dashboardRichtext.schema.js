@@ -5,7 +5,80 @@ const {
 } = require('@mayahq/module-sdk')
 const { init, uiEventListener, clients } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
+const {marked} = require("marked")
+const TurndownService = require("turndown")
+const turndownService = new TurndownService()
+const { convert } = require('html-to-text');
 
+function escape(plaintext) {
+    let html = '';
+    let previousWasASpace = false;
+    for (let index = 0; index < plaintext.length; index++) {
+        let c = plaintext[index];
+        if (c === ' ') {
+            if (previousWasASpace) {
+                html = html + '&nbsp;';
+                previousWasASpace = false;
+                continue;
+            }
+            previousWasASpace = true;
+        } else {
+            previousWasASpace = false;
+        }
+        switch (c) {
+            case '<': {
+                html = html + '&lt;';
+                break;
+            }
+            case '>': {
+                html = html + '&gt;';
+                break;
+            }
+            case '&': {
+                html = html + '&amp;';
+                break;
+            }
+            case '"': {
+                html = html + '&quot;';
+                break;
+            }
+            case '\n': {
+                console.log('newlineee');
+                html = html + '<br>';
+                break;
+            }
+            case '\t': {
+                html = html + '&nbsp; &nbsp; &nbsp; &nbsp';
+                break;
+            }
+            default: {
+                if (c.charCodeAt(0) < 128) {
+                    html = html + c;
+                } else {
+                    html = html + '&#' + c.charCodeAt(0) + ';';
+                }
+            }
+        }
+    }
+    return html;
+};
+
+function renderRichText(body, inputFormat) {
+    switch (inputFormat) {
+        case 'html': {
+            return body;
+        }
+        case 'markdown': {
+            return marked.parse(body);
+        }
+        case 'plaintext': {
+            return escape(body);
+        }
+        default: {
+            return body;
+        }
+    }
+};
 class DashboardRichtext extends Node {
     constructor(node, RED, opts) {
         super(node, RED, {
@@ -21,10 +94,12 @@ class DashboardRichtext extends Node {
         isConfig: false,
         fields: {
             alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myRichText' }),
+            inputFormat: new fields.Select({ options: ['html', 'markdown', 'plaintext'], defaultVal: 'html', displayName: 'Input format'  }),
             outputFormat: new fields.Select({ options: ['html', 'markdown', 'plaintext'], defaultVal: 'html', displayName: 'Output format'  }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
             group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
-            debounceBy: new fields.Typed({ type: 'num', allowedTypes: ['num'], defaultVal: 400, displayName: 'Time to wait before msg is sent'})
+            passthru: new fields.Typed({type: 'bool', allowedTypes:["bool"], displayName: 'Output on change', defaultVal: "false"}),
+            debounceBy: new fields.Typed({ type: 'num', allowedTypes: ['num'], defaultVal: 400, displayName: 'Time to wait before msg is sent'}),
         },
 
     })
@@ -41,15 +116,40 @@ class DashboardRichtext extends Node {
 
     onInit() {
         init(this.RED.server, this.RED.settings)
+
         uiEventListener.on(`richtext:${this.redNode.id}`, ({ event, _sockId }) => {
             const alias = this.getFieldValue('alias')
-
+            const passthru = this.getFieldValue('passthru')
+            const outputFormat = this.redNode.outputFormat
             const { body, format } = event
+            let outputBody;
+            switch (outputFormat) {
+				case 'html': {
+					outputBody = body;
+                    break;
+				}
+				case 'markdown': {
+					const markdownContent = turndownService.turndown(body);
+					outputBody =  markdownContent;
+                    break;
+				}
+				case 'plaintext': {
+					// Not sure how well this will work
+					const plaintextContent = convert(body, {
+                        wordwrap: 130
+                    });
+					outputBody =  plaintextContent;
+                    break;
+				}
+				default:
+					outputBody = body;
+			}
+
             const flowContext = this.redNode.context().flow
             const key = `richtext_${alias}`
-            flowContext.set(key, { body, format })
-
-            this.redNode.send({ body: body, payload: body, _sockId })
+            flowContext.set(key, { body: outputBody, format })
+            if(passthru)
+                this.redNode.send({ body: outputBody, payload: outputBody, _sockId })
         })
     }
 
@@ -64,7 +164,7 @@ class DashboardRichtext extends Node {
                 richtextEvent = {
                     componentType: 'RICHTEXT',
                     type: 'POPULATE',
-                    body: `<p>${msg.payload}</p>`
+                    body: `${renderRichText(msg.payload, vals.inputFormat)}`
                 }
             }
         }

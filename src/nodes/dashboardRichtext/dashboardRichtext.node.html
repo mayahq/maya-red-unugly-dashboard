@@ -16,6 +16,9 @@
             payloadTypealias: {
                 value: "str"
             },
+            inputFormat: {
+                value: "html"
+            },
             outputFormat: {
                 value: "html"
             },
@@ -30,6 +33,13 @@
                 value: "",
                 type: "dashboard-group",
                 required: true
+            },
+            passthru: {
+                value: "false",
+                required: false
+            },
+            payloadTypepassthru: {
+                value: "bool"
             },
             debounceBy: {
                 value: "400",
@@ -66,6 +76,12 @@
             })
             $("#node-input-alias").typedInput("type", this.payloadTypealias)
 
+            const inputFormatselectFieldValues = ["html", "markdown", "plaintext"]
+            inputFormatselectFieldValues.forEach((val) => {
+                $("#node-input-inputFormat").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-inputFormat").val(this.inputFormat)
+
             const outputFormatselectFieldValues = ["html", "markdown", "plaintext"]
             outputFormatselectFieldValues.forEach((val) => {
                 $("#node-input-outputFormat").append($("<option></option>").attr("value", val).text(val))
@@ -89,6 +105,24 @@
                 types: ["num"]
             })
             $("#node-input-width").typedInput("type", this.payloadTypewidth)
+
+            if (this.payloadTypepassthru === null) {
+                if (this.passthru === "") {
+                    this.payloadTypepassthru = "date"
+                } else {
+                    this.payloadTypepassthru = "bool"
+                }
+            } else if (this.payloadTypepassthru === 'string' || this.payloadTypepassthru === 'none') {
+                this.payloadTypepassthru = "bool"
+            }
+
+            $("#node-input-payloadTypepassthru").val(this.payloadTypepassthru)
+            $("#node-input-passthru").typedInput({
+                default: "bool",
+                typeField: $("#node-input-payloadTypepassthru"),
+                types: ["bool"]
+            })
+            $("#node-input-passthru").typedInput("type", this.payloadTypepassthru)
 
             if (this.payloadTypedebounceBy === null) {
                 if (this.debounceBy === "") {
@@ -129,6 +163,11 @@
         <input type="hidden" id="node-input-payloadTypealias">
     </div>
     <div class="form-row">
+        <label for="node-input-inputFormat">Input format</label>
+        <select type="text" id="node-input-inputFormat">
+        </select>
+    </div>
+    <div class="form-row">
         <label for="node-input-outputFormat">Output format</label>
         <select type="text" id="node-input-outputFormat">
         </select>
@@ -141,6 +180,11 @@
     <div class="form-row">
         <label for="node-input-group">Group</label>
         <input type="text" id="node-input-group"></input>
+    </div>
+    <div class="form-row">
+        <label for="node-input-passthru">Output on change</label>
+        <input type="text" id="node-input-passthru"></input>
+        <input type="hidden" id="node-input-payloadTypepassthru">
     </div>
     <div class="form-row">
         <label for="node-input-debounceBy">Time to wait before msg is sent</label>
