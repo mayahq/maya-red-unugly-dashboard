@@ -23,7 +23,8 @@ class DashboardTable extends Node {
             alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myTable' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
             group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
-            truncateAfter: new fields.Typed({ type: "num", allowedTypes: ["num"], display: "Truncate after", defaultVal: -1 })
+            truncateAfter: new fields.Typed({ type: "num", allowedTypes: ["num"], display: "Truncate after", defaultVal: -1 }),
+            actionButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Action button label", defaultVal: 'Process' }),
             // Whatever custom fields the node needs.
         },
     })
@@ -42,7 +43,7 @@ class DashboardTable extends Node {
 
             switch (event.type) {
                 case 'rowClick': {
-                    const { rowData } = event
+                    const { rowData, action } = event
                     const payload = {}
                     try {
                         Object.keys(rowData.fields).forEach(key => {
@@ -53,7 +54,7 @@ class DashboardTable extends Node {
                         // runtime in case of bad data, so this is a blanket try-catch
                     }
         
-                    this.redNode.send({ rowData: [rowData], payload, _sockId })
+                    this.redNode.send({ rowData: [rowData], payload, action, _sockId })
                     break
                 }
                 case 'rowSelect': {
@@ -81,6 +82,10 @@ class DashboardTable extends Node {
     
                         tableData.selected = selectedRows
                         flowContext.set(key, tableData)
+                        
+                        const allRows = tableData.rows || []
+                        const rowsToSend = allRows.filter((row) => selectedRows[row._identifier?.value])
+                        this.redNode.send({ rowData: rowsToSend, _sockId, selectedRows })
                     } catch (e) {
                         console.log('Error updating selected rows in table context data')
                         // Don't want bad data to crash the entire runtime

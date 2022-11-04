@@ -35,6 +35,13 @@
             payloadTypetruncateAfter: {
                 value: "num"
             },
+            actionButtonLabel: {
+                value: "Process",
+                required: false
+            },
+            payloadTypeactionButtonLabel: {
+                value: "str"
+            },
         },
         inputs: 1,
         outputs: 1,
@@ -99,6 +106,24 @@
             })
             $("#node-input-truncateAfter").typedInput("type", this.payloadTypetruncateAfter)
 
+            if (this.payloadTypeactionButtonLabel === null) {
+                if (this.actionButtonLabel === "") {
+                    this.payloadTypeactionButtonLabel = "date"
+                } else {
+                    this.payloadTypeactionButtonLabel = "str"
+                }
+            } else if (this.payloadTypeactionButtonLabel === 'string' || this.payloadTypeactionButtonLabel === 'none') {
+                this.payloadTypeactionButtonLabel = "str"
+            }
+
+            $("#node-input-payloadTypeactionButtonLabel").val(this.payloadTypeactionButtonLabel)
+            $("#node-input-actionButtonLabel").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypeactionButtonLabel"),
+                types: ["str"]
+            })
+            $("#node-input-actionButtonLabel").typedInput("type", this.payloadTypeactionButtonLabel)
+
         },
         oneditsave: function() {},
         oneditcancel: function() {},
@@ -132,6 +157,11 @@
         <label for="node-input-truncateAfter">truncateAfter</label>
         <input type="text" id="node-input-truncateAfter"></input>
         <input type="hidden" id="node-input-payloadTypetruncateAfter">
+    </div>
+    <div class="form-row">
+        <label for="node-input-actionButtonLabel">Action button label</label>
+        <input type="text" id="node-input-actionButtonLabel"></input>
+        <input type="hidden" id="node-input-payloadTypeactionButtonLabel">
     </div>
 </script>
 
