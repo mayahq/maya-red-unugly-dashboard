@@ -43,7 +43,6 @@ function escape(plaintext) {
                 break;
             }
             case '\n': {
-                console.log('newlineee');
                 html = html + '<br>';
                 break;
             }
@@ -196,7 +195,6 @@ class DashboardRichtext extends Node {
         const key = `richtext_${vals.alias}`
         const context = flowContext.get(key) || {}
         let modfiedContext = {...context, ...msg}
-        console.log("🚀 ~ file: dashboardRichtext.schema.js ~ line 188 ~ DashboardRichtext ~ onMessage ~ modfiedContext", modfiedContext)
         
         flowContext.set(key, modfiedContext)
 
