@@ -43,7 +43,6 @@ function escape(plaintext) {
                 break;
             }
             case '\n': {
-                console.log('newlineee');
                 html = html + '<br>';
                 break;
             }
@@ -149,7 +148,18 @@ class DashboardRichtext extends Node {
             const flowContext = this.redNode.context().flow
             const key = `richtext_${alias}`
             const context = flowContext.get(key)
-            let modfiedContext = {...context, body: outputBody, payload: outputBody}
+            if(context.payload){
+                if (typeof context.payload === "string"){
+                    let tmp = context.payload;
+                    context.payload = {
+                        old: tmp,
+                        body : outputBody
+                    }
+                } else if (typeof context.payload === "object"){
+                    context.payload["body"] = outputBody
+                }
+            }
+            let modfiedContext = context
             flowContext.set(key, modfiedContext)
             if(passthru){
                 this.redNode.send({ ...modfiedContext, _sockId })
