@@ -50,16 +50,18 @@ class DashboardButton extends Node {
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 2 }),
             label: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Label", defaultVal: "Button" }),
             tooltip: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Tooltip", defaultVal: "" }),
-            color: new fields.Select({ options: buttonColorOpts, defaultVal: 'blue', displayName: 'Color' }),
-            style: new fields.Select({ options: buttonStyles, defaultVal: 'solid', displayName: 'Style' }),
+            debounce: new fields.Typed({ type: 'num', allowedTypes: ['num'], displayName: 'Debounce', defaultVal: '0' }),
             loadingOnClick: new fields.Select({ options: ['yes', 'no'], defaultVal: 'yes', displayName: "Show loading on click" }),
             payloadOnClick: new fields.Typed({
-                type: "str", 
+                type: "flow", 
                 allowedTypes: ["msg", "flow", "global", "str", "num", "bool", "json"], 
                 displayName: "Payload to send on click", 
                 defaultVal: "payload"
             }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' })
+            color: new fields.Select({ options: buttonColorOpts, defaultVal: 'blue', displayName: 'Color' }),
+            style: new fields.Select({ options: buttonStyles, defaultVal: 'solid', displayName: 'Style' }),
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
+            placement: new fields.Select({ options: ['header', 'content', 'footer'], defaultVal: 'footer', displayName: 'Position in group' })
         },
     })
 

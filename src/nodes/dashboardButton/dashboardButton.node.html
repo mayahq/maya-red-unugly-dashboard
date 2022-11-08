@@ -30,11 +30,12 @@
             payloadTypetooltip: {
                 value: "str"
             },
-            color: {
-                value: "blue"
+            debounce: {
+                value: "0",
+                required: false
             },
-            style: {
-                value: "solid"
+            payloadTypedebounce: {
+                value: "num"
             },
             loadingOnClick: {
                 value: "yes"
@@ -44,12 +45,21 @@
                 required: false
             },
             payloadTypepayloadOnClick: {
-                value: "str"
+                value: "flow"
+            },
+            color: {
+                value: "blue"
+            },
+            style: {
+                value: "solid"
             },
             group: {
                 value: "",
                 type: "dashboard-group",
                 required: true
+            },
+            placement: {
+                value: "footer"
             },
         },
         inputs: 1,
@@ -115,6 +125,48 @@
             })
             $("#node-input-tooltip").typedInput("type", this.payloadTypetooltip)
 
+            if (this.payloadTypedebounce === null) {
+                if (this.debounce === "") {
+                    this.payloadTypedebounce = "date"
+                } else {
+                    this.payloadTypedebounce = "num"
+                }
+            } else if (this.payloadTypedebounce === 'string' || this.payloadTypedebounce === 'none') {
+                this.payloadTypedebounce = "num"
+            }
+
+            $("#node-input-payloadTypedebounce").val(this.payloadTypedebounce)
+            $("#node-input-debounce").typedInput({
+                default: "num",
+                typeField: $("#node-input-payloadTypedebounce"),
+                types: ["num"]
+            })
+            $("#node-input-debounce").typedInput("type", this.payloadTypedebounce)
+
+            const loadingOnClickselectFieldValues = ["yes", "no"]
+            loadingOnClickselectFieldValues.forEach((val) => {
+                $("#node-input-loadingOnClick").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-loadingOnClick").val(this.loadingOnClick)
+
+            if (this.payloadTypepayloadOnClick === null) {
+                if (this.payloadOnClick === "") {
+                    this.payloadTypepayloadOnClick = "date"
+                } else {
+                    this.payloadTypepayloadOnClick = "flow"
+                }
+            } else if (this.payloadTypepayloadOnClick === 'string' || this.payloadTypepayloadOnClick === 'none') {
+                this.payloadTypepayloadOnClick = "flow"
+            }
+
+            $("#node-input-payloadTypepayloadOnClick").val(this.payloadTypepayloadOnClick)
+            $("#node-input-payloadOnClick").typedInput({
+                default: "flow",
+                typeField: $("#node-input-payloadTypepayloadOnClick"),
+                types: ["msg", "flow", "global", "str", "num", "bool", "json"]
+            })
+            $("#node-input-payloadOnClick").typedInput("type", this.payloadTypepayloadOnClick)
+
             const colorselectFieldValues = ["blue", "gray", "green", "orange", "pink", "red", "teal", "yellow", "whiteAlpha", "facebook"]
             colorselectFieldValues.forEach((val) => {
                 $("#node-input-color").append($("<option></option>").attr("value", val).text(val))
@@ -127,29 +179,11 @@
             })
             $("#node-input-style").val(this.style)
 
-            const loadingOnClickselectFieldValues = ["yes", "no"]
-            loadingOnClickselectFieldValues.forEach((val) => {
-                $("#node-input-loadingOnClick").append($("<option></option>").attr("value", val).text(val))
+            const placementselectFieldValues = ["header", "content", "footer"]
+            placementselectFieldValues.forEach((val) => {
+                $("#node-input-placement").append($("<option></option>").attr("value", val).text(val))
             })
-            $("#node-input-loadingOnClick").val(this.loadingOnClick)
-
-            if (this.payloadTypepayloadOnClick === null) {
-                if (this.payloadOnClick === "") {
-                    this.payloadTypepayloadOnClick = "date"
-                } else {
-                    this.payloadTypepayloadOnClick = "str"
-                }
-            } else if (this.payloadTypepayloadOnClick === 'string' || this.payloadTypepayloadOnClick === 'none') {
-                this.payloadTypepayloadOnClick = "str"
-            }
-
-            $("#node-input-payloadTypepayloadOnClick").val(this.payloadTypepayloadOnClick)
-            $("#node-input-payloadOnClick").typedInput({
-                default: "str",
-                typeField: $("#node-input-payloadTypepayloadOnClick"),
-                types: ["msg", "flow", "global", "str", "num", "bool", "json"]
-            })
-            $("#node-input-payloadOnClick").typedInput("type", this.payloadTypepayloadOnClick)
+            $("#node-input-placement").val(this.placement)
 
         },
         oneditsave: function() {},
@@ -182,14 +216,9 @@
         <input type="hidden" id="node-input-payloadTypetooltip">
     </div>
     <div class="form-row">
-        <label for="node-input-color">Color</label>
-        <select type="text" id="node-input-color">
-        </select>
-    </div>
-    <div class="form-row">
-        <label for="node-input-style">Style</label>
-        <select type="text" id="node-input-style">
-        </select>
+        <label for="node-input-debounce">Debounce</label>
+        <input type="text" id="node-input-debounce"></input>
+        <input type="hidden" id="node-input-payloadTypedebounce">
     </div>
     <div class="form-row">
         <label for="node-input-loadingOnClick">Show loading on click</label>
@@ -202,8 +231,23 @@
         <input type="hidden" id="node-input-payloadTypepayloadOnClick">
     </div>
     <div class="form-row">
+        <label for="node-input-color">Color</label>
+        <select type="text" id="node-input-color">
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-style">Style</label>
+        <select type="text" id="node-input-style">
+        </select>
+    </div>
+    <div class="form-row">
         <label for="node-input-group">Group</label>
         <input type="text" id="node-input-group"></input>
+    </div>
+    <div class="form-row">
+        <label for="node-input-placement">Position in group</label>
+        <select type="text" id="node-input-placement">
+        </select>
     </div>
 </script>
 
