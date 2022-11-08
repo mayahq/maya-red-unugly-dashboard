@@ -16,7 +16,7 @@ class DashboardForm extends Node {
 
     static schema = new Schema({
         name: 'dashboard-form',
-        label: 'dashboard-form',
+        label: 'Form',
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
@@ -28,7 +28,6 @@ class DashboardForm extends Node {
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
             group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
         },
-
     })
 
     onInit() {

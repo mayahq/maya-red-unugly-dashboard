@@ -35,7 +35,7 @@ class DashboardTable extends Node {
 
     static schema = new Schema({
         name: 'dashboard-table',
-        label: 'dashboard-table',
+        label: 'Table',
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {

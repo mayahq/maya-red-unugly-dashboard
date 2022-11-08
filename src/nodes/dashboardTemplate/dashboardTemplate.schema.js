@@ -18,7 +18,7 @@ class DashboardTemplate extends Node {
 
     static schema = new Schema({
         name: 'dashboard-template',
-        label: 'dashboard-template',
+        label: 'Template',
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {

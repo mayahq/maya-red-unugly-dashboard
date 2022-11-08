@@ -43,7 +43,7 @@ class DashboardButton extends Node {
 
     static schema = new Schema({
         name: 'dashboard-button',
-        label: 'dashboard-button',
+        label: 'Button',
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {

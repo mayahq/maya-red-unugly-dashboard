@@ -88,7 +88,7 @@ class DashboardRichtext extends Node {
 
     static schema = new Schema({
         name: 'dashboard-richtext',
-        label: 'dashboard-richtext',
+        label: 'Richtext editor',
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {

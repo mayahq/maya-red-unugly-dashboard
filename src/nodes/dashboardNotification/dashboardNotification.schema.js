@@ -31,7 +31,7 @@ class DashboardNotification extends Node {
 
     static schema = new Schema({
         name: 'dashboard-notification',
-        label: 'dashboard-notification',
+        label: 'Notification',
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
