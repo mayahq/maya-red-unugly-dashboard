@@ -24,7 +24,8 @@
       "dashboard-template": "src/nodes/dashboardTemplate/dashboardTemplate.node.js",
       "dashboard-form": "src/nodes/dashboardForm/dashboardForm.node.js",
       "dashboard-notification": "src/nodes/dashboardNotification/dashboardNotification.node.js",
-      "dashboard-richtext": "src/nodes/dashboardRichtext/dashboardRichtext.node.js"
+      "dashboard-richtext": "src/nodes/dashboardRichtext/dashboardRichtext.node.js",
+      "dashboard-image": "src/nodes/dashboardImage/dashboardImage.node.js"
     }
   },
   "mayaDetails": {

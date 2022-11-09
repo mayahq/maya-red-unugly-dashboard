@@ -1,0 +1,164 @@
+<script type='text/javascript'>
+    RED.nodes.registerType("dashboard-image", {
+        category: "Maya Red Unugly Dashboard",
+        color: "#8BBDD9",
+        defaults: {
+            name: {
+                value: ""
+            },
+            isProfileConfigNode: {
+                value: false
+            },
+            src: {
+                value: "",
+                required: false
+            },
+            payloadTypesrc: {
+                value: "str"
+            },
+            caption: {
+                value: "",
+                required: false
+            },
+            payloadTypecaption: {
+                value: "str"
+            },
+            width: {
+                value: "8",
+                required: false
+            },
+            payloadTypewidth: {
+                value: "num"
+            },
+            group: {
+                value: "",
+                type: "dashboard-group",
+                required: true
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "fa-file-code-o.png",
+        label: function() {
+            return this.name || "Image"
+        },
+        paletteLabel: "Image",
+        exportable: true,
+        oneditprepare: function() {
+            if (this.payloadTypesrc === null) {
+                if (this.src === "") {
+                    this.payloadTypesrc = "date"
+                } else {
+                    this.payloadTypesrc = "str"
+                }
+            } else if (this.payloadTypesrc === 'string' || this.payloadTypesrc === 'none') {
+                this.payloadTypesrc = "str"
+            }
+
+            $("#node-input-payloadTypesrc").val(this.payloadTypesrc)
+            $("#node-input-src").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypesrc"),
+                types: ["str", "msg", "flow", "global"]
+            })
+            $("#node-input-src").typedInput("type", this.payloadTypesrc)
+
+            if (this.payloadTypecaption === null) {
+                if (this.caption === "") {
+                    this.payloadTypecaption = "date"
+                } else {
+                    this.payloadTypecaption = "str"
+                }
+            } else if (this.payloadTypecaption === 'string' || this.payloadTypecaption === 'none') {
+                this.payloadTypecaption = "str"
+            }
+
+            $("#node-input-payloadTypecaption").val(this.payloadTypecaption)
+            $("#node-input-caption").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypecaption"),
+                types: ["str", "msg", "flow", "global"]
+            })
+            $("#node-input-caption").typedInput("type", this.payloadTypecaption)
+
+            if (this.payloadTypewidth === null) {
+                if (this.width === "") {
+                    this.payloadTypewidth = "date"
+                } else {
+                    this.payloadTypewidth = "num"
+                }
+            } else if (this.payloadTypewidth === 'string' || this.payloadTypewidth === 'none') {
+                this.payloadTypewidth = "num"
+            }
+
+            $("#node-input-payloadTypewidth").val(this.payloadTypewidth)
+            $("#node-input-width").typedInput({
+                default: "num",
+                typeField: $("#node-input-payloadTypewidth"),
+                types: ["num"]
+            })
+            $("#node-input-width").typedInput("type", this.payloadTypewidth)
+
+        },
+        oneditsave: function() {},
+        oneditcancel: function() {},
+        oneditdelete: function() {},
+        oneditresize: function() {},
+        onpaletteadd: function() {},
+        onpaletteremove: function() {}
+    });
+</script>
+
+<script type="text/html" data-template-name="dashboard-image">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-src">Image URL</label>
+        <input type="text" id="node-input-src"></input>
+        <input type="hidden" id="node-input-payloadTypesrc">
+    </div>
+    <div class="form-row">
+        <label for="node-input-caption">Caption</label>
+        <input type="text" id="node-input-caption"></input>
+        <input type="hidden" id="node-input-payloadTypecaption">
+    </div>
+    <div class="form-row">
+        <label for="node-input-width">Width</label>
+        <input type="text" id="node-input-width"></input>
+        <input type="hidden" id="node-input-payloadTypewidth">
+    </div>
+    <div class="form-row">
+        <label for="node-input-group">Group</label>
+        <input type="text" id="node-input-group"></input>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="dashboard-image">
+    <h2>Description</h2>
+    <p>Query opens tabs based on criteria like URL, muted status</p>
+
+    <h2>Config</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+
+
+    <h2>Outputs</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+</script>
