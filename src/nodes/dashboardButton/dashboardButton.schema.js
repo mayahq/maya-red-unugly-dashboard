@@ -89,27 +89,35 @@ class DashboardButton extends Node {
     }
 
     async onMessage(msg, vals) {
-        // const _sockId = msg.sockId
-        // let socks = []
-        // if (_sockId) {
-        //     socks = [_sockId]
-            
-        // } else {
-        //     socks = Object.keys(clients)
-        // }
 
-        // socks.forEach(sockId => {
-        //     const sock = clients[sockId]
-        //     if (!sock) {
-        //         return
-        //     }
-        //     sock.emit('dashboardDataUpdate', {
-        //         componentType: 'BUTTON',
-        //         componentId: `button::${this.redNode.id}`,
-        //         event: msg.tableEvent,
-        //         sockId: sockId
-        //     })
-        // })
+        const buttonEvent = msg.buttonEvent
+
+        const _sockId = msg._sockId
+        let socks = []
+        if (_sockId) {
+            socks = [_sockId]
+        } else {
+            socks = Object.keys(clients)
+        }
+
+        socks.forEach(sockId => {
+            try {
+                const sock = clients[sockId]
+                if (!sock) {
+                    return
+                }
+                sock.emit('dashboardDataUpdate', {
+                    componentType: 'BUTTON',
+                    componentId: `button:${this.redNode.id}`,
+                    event: buttonEvent,
+                    sockId: sockId
+                })
+            } catch (e) {
+                console.log('Unable to send button message', e)
+            }
+        })
+
+        return null
 
         return null
     }
