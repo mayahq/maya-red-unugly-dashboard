@@ -9,6 +9,13 @@
             isProfileConfigNode: {
                 value: false
             },
+            alias: {
+                value: "1",
+                required: false
+            },
+            payloadTypealias: {
+                value: "str"
+            },
             title: {
                 value: "Template",
                 required: false
@@ -55,6 +62,24 @@
         paletteLabel: "Template",
         exportable: true,
         oneditprepare: function() {
+            if (this.payloadTypealias === null) {
+                if (this.alias === "") {
+                    this.payloadTypealias = "date"
+                } else {
+                    this.payloadTypealias = "str"
+                }
+            } else if (this.payloadTypealias === 'string' || this.payloadTypealias === 'none') {
+                this.payloadTypealias = "str"
+            }
+
+            $("#node-input-payloadTypealias").val(this.payloadTypealias)
+            $("#node-input-alias").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypealias"),
+                types: ["str"]
+            })
+            $("#node-input-alias").typedInput("type", this.payloadTypealias)
+
             if (this.payloadTypetitle === null) {
                 if (this.title === "") {
                     this.payloadTypetitle = "date"
@@ -147,6 +172,11 @@
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-alias">Alias</label>
+        <input type="text" id="node-input-alias"></input>
+        <input type="hidden" id="node-input-payloadTypealias">
     </div>
     <div class="form-row">
         <label for="node-input-title">Title</label>

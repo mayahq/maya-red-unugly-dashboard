@@ -22,6 +22,7 @@ class DashboardTemplate extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
+            alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: '1' }),
             title: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Title", defaultVal: 'Template' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
             templateBody: new fields.Typed({ type: "str", allowedTypes: ['str', 'msg', 'flow'], defaultVal: "hello", displayName: 'Template' }),
@@ -32,8 +33,27 @@ class DashboardTemplate extends Node {
 
     })
 
+    getFieldValue(fieldName) {
+        const schema = this.constructor.schema
+        const field = schema.fields[fieldName]
+        if (!field.resolveValue) {
+            return null
+        }
+
+        return field.resolveValue(this.RED, fieldName, this.redNode, null, {})
+    }
+
+    saveTemplate(templateVal) {
+        const flowContext = this.redNode.context().flow
+        const alias = this.getFieldValue('alias')
+
+        flowContext.set(`template_${alias}`, { template: templateVal })
+    }
+
     onInit() {
         init(this.RED.server, this.RED.settings)
+        const templateVal = this.getFieldValue('templateBody')
+        this.saveTemplate(templateVal)
     }
 
     async onMessage(msg, vals) {
