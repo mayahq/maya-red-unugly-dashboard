@@ -122,48 +122,61 @@ class DashboardRichtext extends Node {
             const alias = this.getFieldValue('alias')
             const passthru = this.getFieldValue('passthru')
             const outputFormat = this.redNode.outputFormat
-            const { body } = event
-            let outputBody;
-            switch (outputFormat) {
-				case 'html': {
-					outputBody = body;
-                    break;
-				}
-				case 'markdown': {
-					const markdownContent = turndownService.turndown(body);
-					outputBody =  markdownContent;
-                    break;
-				}
-				case 'plaintext': {
-					// Not sure how well this will work
-					const plaintextContent = convert(body, {
-                        wordwrap: 130
-                    });
-					outputBody =  plaintextContent;
-                    break;
-				}
-				default:
-					outputBody = body;
-			}
 
-            const flowContext = this.redNode.context().flow
-            const key = `richtext_${alias}`
-            const context = flowContext.get(key)
-            if(context.payload){
-                if (typeof context.payload === "string"){
-                    let tmp = context.payload;
-                    context.payload = {
-                        old: tmp,
-                        body : outputBody
+            if (event.type === 'bodyChange') {
+                const { body } = event
+                let outputBody;
+                switch (outputFormat) {
+                    case 'html': {
+                        outputBody = body;
+                        break;
                     }
-                } else if (typeof context.payload === "object"){
-                    context.payload["body"] = outputBody
+                    case 'markdown': {
+                        const markdownContent = turndownService.turndown(body);
+                        outputBody =  markdownContent;
+                        break;
+                    }
+                    case 'plaintext': {
+                        // Not sure how well this will work
+                        const plaintextContent = convert(body, {
+                            wordwrap: 130
+                        });
+                        outputBody =  plaintextContent;
+                        break;
+                    }
+                    default:
+                        outputBody = body;
+                }
+    
+                const flowContext = this.redNode.context().flow
+                const key = `richtext_${alias}`
+                const context = flowContext.get(key)
+
+                if (context?.payload) {
+                    if (typeof context.payload === "string") {
+                        let tmp = context.payload;
+                        context.payload = {
+                            old: tmp,
+                            body : outputBody
+                        }
+                    } else if (typeof context.payload === "object") {
+                        context.payload["body"] = outputBody
+                    }
+                }
+                let modfiedContext = { ...context }
+                flowContext.set(key, modfiedContext)
+
+                if (passthru) {
+                    this.redNode.send({ ...modfiedContext, _sockId })
                 }
             }
-            let modfiedContext = context
-            flowContext.set(key, modfiedContext)
-            if(passthru){
-                this.redNode.send({ ...modfiedContext, _sockId })
+
+            if (event.type === 'actionButtonClick') {
+                const flowContext = this.redNode.context().flow
+                const key = `richtext_${alias}`
+                const context = flowContext.get(key)
+                
+                this.redNode.send({ richtextContext: context, _sockId })
             }
         })
     }
