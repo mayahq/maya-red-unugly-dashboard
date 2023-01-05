@@ -9,6 +9,11 @@
             isProfileConfigNode: {
                 value: false
             },
+            group: {
+                value: "",
+                type: "dashboard-group",
+                required: true
+            },
             alias: {
                 value: "myRichText",
                 required: false
@@ -28,11 +33,6 @@
             },
             payloadTypewidth: {
                 value: "num"
-            },
-            group: {
-                value: "",
-                type: "dashboard-group",
-                required: true
             },
             passthru: {
                 value: "false",
@@ -54,6 +54,13 @@
             },
             payloadTypeinputData: {
                 value: "msg"
+            },
+            actionButtonText: {
+                value: "Save",
+                required: false
+            },
+            payloadTypeactionButtonText: {
+                value: "str"
             },
         },
         inputs: 1,
@@ -167,6 +174,24 @@
             })
             $("#node-input-inputData").typedInput("type", this.payloadTypeinputData)
 
+            if (this.payloadTypeactionButtonText === null) {
+                if (this.actionButtonText === "") {
+                    this.payloadTypeactionButtonText = "date"
+                } else {
+                    this.payloadTypeactionButtonText = "str"
+                }
+            } else if (this.payloadTypeactionButtonText === 'string' || this.payloadTypeactionButtonText === 'none') {
+                this.payloadTypeactionButtonText = "str"
+            }
+
+            $("#node-input-payloadTypeactionButtonText").val(this.payloadTypeactionButtonText)
+            $("#node-input-actionButtonText").typedInput({
+                default: "str",
+                typeField: $("#node-input-payloadTypeactionButtonText"),
+                types: ["str"]
+            })
+            $("#node-input-actionButtonText").typedInput("type", this.payloadTypeactionButtonText)
+
         },
         oneditsave: function() {},
         oneditcancel: function() {},
@@ -181,6 +206,10 @@
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-group">Group</label>
+        <input type="text" id="node-input-group"></input>
     </div>
     <div class="form-row">
         <label for="node-input-alias">Alias</label>
@@ -203,10 +232,6 @@
         <input type="hidden" id="node-input-payloadTypewidth">
     </div>
     <div class="form-row">
-        <label for="node-input-group">Group</label>
-        <input type="text" id="node-input-group"></input>
-    </div>
-    <div class="form-row">
         <label for="node-input-passthru">Output on change</label>
         <input type="text" id="node-input-passthru"></input>
         <input type="hidden" id="node-input-payloadTypepassthru">
@@ -220,6 +245,11 @@
         <label for="node-input-inputData">Editable data</label>
         <input type="text" id="node-input-inputData"></input>
         <input type="hidden" id="node-input-payloadTypeinputData">
+    </div>
+    <div class="form-row">
+        <label for="node-input-actionButtonText">Action button text</label>
+        <input type="text" id="node-input-actionButtonText"></input>
+        <input type="hidden" id="node-input-payloadTypeactionButtonText">
     </div>
 </script>
 

@@ -47,6 +47,7 @@ class DashboardButton extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 2 }),
             label: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Label", defaultVal: "Button" }),
             tooltip: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Tooltip", defaultVal: "" }),
@@ -60,7 +61,6 @@ class DashboardButton extends Node {
             }),
             color: new fields.Select({ options: buttonColorOpts, defaultVal: 'blue', displayName: 'Color' }),
             style: new fields.Select({ options: buttonStyles, defaultVal: 'solid', displayName: 'Style' }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             placement: new fields.Select({ options: ['header', 'content', 'footer'], defaultVal: 'footer', displayName: 'Position in group' })
         },
     })

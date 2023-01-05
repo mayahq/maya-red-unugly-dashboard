@@ -92,14 +92,15 @@ class DashboardRichtext extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myRichText' }),
             inputFormat: new fields.Select({ options: ['html', 'markdown', 'plaintext'], defaultVal: 'html', displayName: 'Input format'  }),
             outputFormat: new fields.Select({ options: ['html', 'markdown', 'plaintext'], defaultVal: 'html', displayName: 'Output format'  }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             passthru: new fields.Typed({type: 'bool', allowedTypes:["bool"], displayName: 'Output on change', defaultVal: "false"}),
             debounceBy: new fields.Typed({ type: 'num', allowedTypes: ['num'], defaultVal: 400, displayName: 'Time to wait before msg is sent'}),
-            inputData: new fields.Typed({ type: "msg", allowedTypes: ["msg", "flow", "global"], defaultVal: "payload", displayName: "Editable data"})
+            inputData: new fields.Typed({ type: "msg", allowedTypes: ["msg", "flow", "global"], defaultVal: "payload", displayName: "Editable data"}),
+            actionButtonText: new fields.Typed({ type: "str", allowedTypes: ["str"], defaultVal: "Save", displayName: "Action button text" }),
         },
 
     })

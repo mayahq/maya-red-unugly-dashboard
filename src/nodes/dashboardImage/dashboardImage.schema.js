@@ -20,10 +20,10 @@ class DashboardImage extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             src: new fields.Typed({ type: 'str', allowedTypes: ['str', 'msg', 'flow', 'global'], displayName: 'Image URL' }),
             caption: new fields.Typed({ type: 'str', allowedTypes: ['str', 'msg', 'flow', 'global'], displayName: 'Caption' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
         },
 
     })

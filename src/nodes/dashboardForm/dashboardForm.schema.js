@@ -20,13 +20,13 @@ class DashboardForm extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myTable' }),
             config: new fields.Typed({ type: "json", allowedTypes: ["json"], displayName: "Form fields", defaultVal: '{}' }),
             submitButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Sufieldsbmit button label", defaultVal: 'Submit' }),
             submitButtonColor: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Submit button color", defaultVal: '' }),
             cancelButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Cancel button label", defaultVal: '' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
         },
     })
 

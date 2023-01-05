@@ -22,13 +22,14 @@ class DashboardTemplate extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group', required: false }),
             alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: '1' }),
             title: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Title", defaultVal: 'Template' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
             templateBody: new fields.Typed({ type: "str", allowedTypes: ['str', 'msg', 'flow'], defaultVal: "hello", displayName: 'Template' }),
             values: new fields.Typed({ type: 'msg', allowedTypes: ['json', 'msg', 'flow'], defaultVal: 'payload', displayName: 'Variables' }),
             renderInDashboard: new fields.Select({ options: ['yes', 'no'], defaultVal: 'yes', displayName: 'Show in dashboard' }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group', required: false }),
+            actionButtonText: new fields.Typed({ type: "str", allowedTypes: ["str"], defaultVal: "Save", displayName: "Action button text" }),
         },
 
     })

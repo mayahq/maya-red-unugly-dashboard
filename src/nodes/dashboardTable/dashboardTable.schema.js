@@ -39,9 +39,9 @@ class DashboardTable extends Node {
         category: 'Maya Red Unugly Dashboard',
         isConfig: false,
         fields: {
+            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myTable' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
-            group: new fields.ConfigNode({ type: DashboardGroup, displayName: 'Group' }),
             truncateAfter: new fields.Typed({ type: "num", allowedTypes: ["num"], display: "Truncate after", defaultVal: -1 }),
             actionButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Action button label", defaultVal: 'Process' }),
             colorScheme: new fields.Select({ options: colorSchemeOpts, defaultVal: 'blue', displayName: 'Color scheme' })
