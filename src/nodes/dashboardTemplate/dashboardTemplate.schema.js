@@ -55,6 +55,18 @@ class DashboardTemplate extends Node {
         init(this.RED.server, this.RED.settings)
         const templateVal = this.getFieldValue('templateBody')
         this.saveTemplate(templateVal)
+        const alias = this.getFieldValue('alias')
+
+        uiEventListener.on(`template:${this.redNode.id}`, ({ event, _sockId }) => {
+            if (event.type === 'actionButtonClick') {
+                const flowContext = this.redNode.context().flow
+                const componentContext = flowContext.get(`template_${alias}`)
+                this.redNode.send({
+                    templateContext: componentContext,
+                    _sockId
+                })
+            }
+        })
     }
 
     async onMessage(msg, vals) {
