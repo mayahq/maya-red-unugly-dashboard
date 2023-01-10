@@ -66,9 +66,14 @@ class DashboardButton extends Node {
     })
 
     onInit() {
+        console.log('Initialising the button node')
         init(this.RED.server, this.RED.settings)
+        console.log('Init done')
+
+        console.log('redNode ID', this.redNode.id)
 
         uiEventListener.on(`button:${this.redNode.id}`, ({ event, _sockId }) => {
+            console.log('we got a message', event)
             let payloadVal = null
             try {
                 const schema = this.constructor.schema
@@ -80,12 +85,16 @@ class DashboardButton extends Node {
                     {}
                 )
                 payloadVal = val
+                console.log('we here 1')
             } catch (e) {
                 console.log('Unable to resolve payload value', e)
             }
 
+            console.log('We here 2')
             this.redNode.send({ event, _sockId, payload: payloadVal })
         })
+
+        console.log('On init end')
     }
 
     async onMessage(msg, vals) {
