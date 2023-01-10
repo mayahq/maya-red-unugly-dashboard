@@ -71,6 +71,9 @@ class DashboardButton extends Node {
         console.log('Init done')
 
         console.log('redNode ID', this.redNode.id)
+        console.log('redNode _ID', this.redNode._id)
+        console.log('redNode', this.redNode)
+        console.log('this', this)
 
         uiEventListener.on(`button:${this.redNode.id}`, ({ event, _sockId }) => {
             console.log('we got a message', event)
