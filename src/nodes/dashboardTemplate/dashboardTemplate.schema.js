@@ -45,10 +45,10 @@ class DashboardTemplate extends Node {
     }
 
     saveTemplate(templateVal) {
-        const flowContext = this.redNode.context().flow
+        const globalContext = this.redNode.context().global
         const alias = this.getFieldValue('alias')
 
-        flowContext.set(`template_${alias}`, { template: templateVal })
+        globalContext.set(`template_${alias}`, { template: templateVal })
     }
 
     onInit() {
@@ -59,8 +59,8 @@ class DashboardTemplate extends Node {
 
         uiEventListener.on(`template:${this.redNode.id}`, ({ event, _sockId }) => {
             if (event.type === 'actionButtonClick') {
-                const flowContext = this.redNode.context().flow
-                const componentContext = flowContext.get(`template_${alias}`)
+                const globalContext = this.redNode.context().global
+                const componentContext = globalContext.get(`template_${alias}`)
                 this.redNode.send({
                     templateContext: componentContext,
                     _sockId

@@ -80,10 +80,10 @@ class DashboardTable extends Node {
                 case 'rowSelect': {
                     try {
                         const { rowIdentifier, selected } = event
-                        const flowContext = this.redNode.context().flow
+                        const globalContext = this.redNode.context().global
                         const key = `table_${alias}`
     
-                        const tableData = flowContext.get(key) || {}
+                        const tableData = globalContext.get(key) || {}
                         let selectedRows = tableData.selected || {}
                         if (rowIdentifier === 'all') {
                             if (!selected) {
@@ -101,7 +101,7 @@ class DashboardTable extends Node {
                         }
     
                         tableData.selected = selectedRows
-                        flowContext.set(key, tableData)
+                        globalContext.set(key, tableData)
                         
                         const allRows = tableData.rows || []
                         const rowsToSend = allRows.filter((row) => selectedRows[row._identifier?.value])
@@ -163,19 +163,19 @@ class DashboardTable extends Node {
         /**
          * Maintaining table data in context
          */
-        const flowContext = this.redNode.context().flow
+        const globalContext = this.redNode.context().global
         const key = `table_${vals.alias}`
-        const tableData = flowContext.get(key) || {}
+        const tableData = globalContext.get(key) || {}
 
         if (tableEvent.type === 'POPULATE') {
             const newTableData = { ...tableData, rows: tableEvent.data, selected: {} }
-            flowContext.set(key, newTableData)
+            globalContext.set(key, newTableData)
         }
         if (tableEvent.type === 'ADD_ROWS') {
             let newRows = tableData.rows || []
             newRows = newRows.concat(tableEvent.data)
             const newTableData = { ...tableData, rows: newRows }
-            flowContext.set(key, newTableData)
+            globalContext.set(key, newTableData)
         }
         if (tableEvent.type === 'UPSERT_ROWS') {
             const currentRows = tableData.rows || []
@@ -187,7 +187,7 @@ class DashboardTable extends Node {
 
                 Object.keys(row.fields).forEach(key => tableRow.fields[key] = row.fields[key])
             })
-            flowContext.set(key, { ...tableData, rows: currentRows })
+            globalContext.set(key, { ...tableData, rows: currentRows })
         }
 
         const _sockId = msg._sockId

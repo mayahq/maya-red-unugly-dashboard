@@ -148,9 +148,9 @@ class DashboardRichtext extends Node {
                         outputBody = body;
                 }
     
-                const flowContext = this.redNode.context().flow
+                const globalContext = this.redNode.context().global
                 const key = `richtext_${alias}`
-                const context = flowContext.get(key)
+                const context = globalContext.get(key)
 
                 if (context?.payload) {
                     if (typeof context.payload === "string") {
@@ -164,7 +164,7 @@ class DashboardRichtext extends Node {
                     }
                 }
                 let modfiedContext = { ...context }
-                flowContext.set(key, modfiedContext)
+                globalContext.set(key, modfiedContext)
 
                 if (passthru) {
                     this.redNode.send({ ...modfiedContext, _sockId })
@@ -172,9 +172,9 @@ class DashboardRichtext extends Node {
             }
 
             if (event.type === 'actionButtonClick') {
-                const flowContext = this.redNode.context().flow
+                const globalContext = this.redNode.context().global
                 const key = `richtext_${alias}`
-                const context = flowContext.get(key)
+                const context = globalContext.get(key)
                 
                 this.redNode.send({ richtextContext: context, _sockId })
             }
@@ -205,12 +205,12 @@ class DashboardRichtext extends Node {
             socks = Object.keys(clients)
         }
 
-        const flowContext = this.redNode.context().flow
+        const globalContext = this.redNode.context().global
         const key = `richtext_${vals.alias}`
-        const context = flowContext.get(key) || {}
+        const context = globalContext.get(key) || {}
         let modfiedContext = {...context, ...msg}
         
-        flowContext.set(key, modfiedContext)
+        globalContext.set(key, modfiedContext)
 
         socks.forEach(sockId => {
             const sock = clients[sockId]
