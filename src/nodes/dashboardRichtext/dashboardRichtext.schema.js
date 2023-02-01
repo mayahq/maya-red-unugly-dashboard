@@ -150,19 +150,28 @@ class DashboardRichtext extends Node {
     
                 const globalContext = this.redNode.context().global
                 const key = `richtext_${alias}`
-                const context = globalContext.get(key)
+                const context = globalContext.get(key) || {}
 
-                if (context?.payload) {
-                    if (typeof context.payload === "string") {
-                        let tmp = context.payload;
-                        context.payload = {
-                            old: tmp,
-                            body : outputBody
-                        }
-                    } else if (typeof context.payload === "object") {
-                        context.payload["body"] = outputBody
-                    }
+                if (!context.payload) {
+                    context.payload = {}
                 }
+
+                if (!context.body) {
+                    context.body = ''
+                }
+
+                if (typeof context.payload === "string") {
+                    let tmp = context.payload;
+                    context.payload = {
+                        old: tmp,
+                        body : outputBody
+                    }
+                    context.body = outputBody
+                } else if (typeof context.payload === "object") {
+                    context.payload["body"] = outputBody
+                    context.body = outputBody
+                }
+
                 let modfiedContext = { ...context }
                 globalContext.set(key, modfiedContext)
 
@@ -176,7 +185,7 @@ class DashboardRichtext extends Node {
                 const key = `richtext_${alias}`
                 const context = globalContext.get(key)
                 
-                this.redNode.send({ richtextContext: context, _sockId })
+                this.redNode.send({ ...context, _sockId })
             }
         })
     }
@@ -196,6 +205,17 @@ class DashboardRichtext extends Node {
                 }
             }
         }
+
+        if (richtextEvent.type === 'POPULATE') {
+            const globalContext = this.redNode.context().global
+            const key = `richtext_${vals.alias}`
+            const context = globalContext.get(key) || { payload: '' }
+            let modfiedContext = {
+                ...context,
+                body: richtextEvent.body
+            }
+            globalContext.set(key, modfiedContext)
+        }
         
         const _sockId = msg._sockId
         let socks = []
@@ -204,13 +224,6 @@ class DashboardRichtext extends Node {
         } else {
             socks = Object.keys(clients)
         }
-
-        const globalContext = this.redNode.context().global
-        const key = `richtext_${vals.alias}`
-        const context = globalContext.get(key) || {}
-        let modfiedContext = {...context, ...msg}
-        
-        globalContext.set(key, modfiedContext)
 
         socks.forEach(sockId => {
             const sock = clients[sockId]
