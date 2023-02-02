@@ -176,7 +176,7 @@ class DashboardRichtext extends Node {
                 globalContext.set(key, modfiedContext)
 
                 if (passthru) {
-                    this.redNode.send({ ...modfiedContext, _sockId })
+                    this.redNode.send({ payload: context.body, _sockId })
                 }
             }
 
@@ -185,7 +185,7 @@ class DashboardRichtext extends Node {
                 const key = `richtext_${alias}`
                 const context = globalContext.get(key)
                 
-                this.redNode.send({ ...context, _sockId })
+                this.redNode.send({ payload: context.body, _sockId })
             }
         })
     }
