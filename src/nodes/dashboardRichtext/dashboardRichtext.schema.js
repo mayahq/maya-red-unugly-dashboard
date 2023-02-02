@@ -185,7 +185,7 @@ class DashboardRichtext extends Node {
                 const key = `richtext_${alias}`
                 const context = globalContext.get(key)
                 
-                this.redNode.send({ payload: context.body, _sockId })
+                this.redNode.send({ payload: context?.body, _sockId })
             }
         })
     }
