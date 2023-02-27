@@ -13,6 +13,9 @@ const {
 //     maxH: 12
 // })
 
+const defaultLayout = `{"lg":{"x":0,"y":0,"w":6,"h":15},"md":{"x":0,"y":0,"w":5,"h":13},"sm":{"x":0,"y":0,"w":4,"h":13},"xs":{"x":0,"y":0,"w":4,"h":13},"xxs":{"x":0,"y":0,"w":2,"h":12}}`
+    .replaceAll('\n', '').replaceAll('"', '\\"').replaceAll(' ', '').replaceAll(',', ', ')
+
 class DashboardGroup extends Node {
     constructor(node, RED, opts) {
         super(node, RED, {
@@ -29,7 +32,7 @@ class DashboardGroup extends Node {
         fields: {
             title: new fields.Typed({type: 'str', allowedTypes: ['str'], defaultVal: 'Data', displayName: 'Title' }),
             width: new fields.Typed({type: 'num', allowedTypes: ['num'], defaultVal: 8, displayName: 'Columns' }),
-            positionDetails: new fields.Typed({type: 'json', allowedTypes: ['json'], defaultVal: '', displayName: 'Positioning' }),
+            positionDetails: new fields.Typed({type: 'json', allowedTypes: ['json'], defaultVal: defaultLayout, displayName: 'Positioning' }),
         },
     })
 
