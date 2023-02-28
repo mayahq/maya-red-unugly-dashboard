@@ -176,7 +176,8 @@ class DashboardRichtext extends Node {
                 globalContext.set(key, modfiedContext)
 
                 if (passthru) {
-                    this.redNode.send({ payload: context.body, _sockId })
+                    const lastMessage = globalContext.get(`lastMessage::${this.redNode.id}`) || {}
+                    this.redNode.send({ ...lastMessage, payload: context.body, _sockId })
                 }
             }
 
@@ -184,13 +185,18 @@ class DashboardRichtext extends Node {
                 const globalContext = this.redNode.context().global
                 const key = `richtext_${alias}`
                 const context = globalContext.get(key)
+
+                const lastMessage = globalContext.get(`lastMessage::${this.redNode.id}`) || {}
                 
-                this.redNode.send({ payload: context?.body, _sockId })
+                this.redNode.send({ ...lastMessage, payload: context?.body, _sockId })
             }
         })
     }
 
     async onMessage(msg, vals) {
+        const globalContext = this.redNode.context().global
+        globalContext.set(`lastMessage::${this.redNode.id}`, msg)
+
         let richtextEvent = null
         if (msg.event && msg.event.componentId === 'RICHTEXT') {
             richtextEvent = msg.event
@@ -207,7 +213,6 @@ class DashboardRichtext extends Node {
         }
 
         if (richtextEvent.type === 'POPULATE') {
-            const globalContext = this.redNode.context().global
             const key = `richtext_${vals.alias}`
             const context = globalContext.get(key) || { payload: '' }
             let modfiedContext = {
