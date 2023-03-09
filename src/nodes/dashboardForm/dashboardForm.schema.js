@@ -6,6 +6,27 @@ const {
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 const { clients, uiEventListener, init } = require('../../util/socket')
 
+const formColorOpts = [
+    'blue',
+    'gray',
+    'green',
+    'orange',
+    'pink',
+    'red',
+    'teal',
+    'yellow',
+    'whiteAlpha',
+    'facebook',
+    // 'blackAlpha',
+    // 'cyan',
+    // 'linkedin',
+    // 'messenger',
+    // 'purple',
+    // 'telegram',
+    // 'twitter',
+    // 'whatsapp',
+]
+
 class DashboardForm extends Node {
     constructor(node, RED, opts) {
         super(node, RED, {
@@ -24,9 +45,9 @@ class DashboardForm extends Node {
             alias: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Alias", defaultVal: 'myTable' }),
             config: new fields.Typed({ type: "json", allowedTypes: ["json"], displayName: "Form fields", defaultVal: '{}' }),
             submitButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Sufieldsbmit button label", defaultVal: 'Submit' }),
-            submitButtonColor: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Submit button color", defaultVal: '' }),
             cancelButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Cancel button label", defaultVal: '' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
+            colorScheme: new fields.Select({ options: formColorOpts, defaultVal: 'blue', displayName: 'Color scheme' })
         },
     })
 

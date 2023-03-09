@@ -35,13 +35,6 @@
             payloadTypesubmitButtonLabel: {
                 value: "str"
             },
-            submitButtonColor: {
-                value: "",
-                required: false
-            },
-            payloadTypesubmitButtonColor: {
-                value: "str"
-            },
             cancelButtonLabel: {
                 value: "",
                 required: false
@@ -55,6 +48,9 @@
             },
             payloadTypewidth: {
                 value: "num"
+            },
+            colorScheme: {
+                value: "blue"
             },
         },
         inputs: 1,
@@ -120,24 +116,6 @@
             })
             $("#node-input-submitButtonLabel").typedInput("type", this.payloadTypesubmitButtonLabel)
 
-            if (this.payloadTypesubmitButtonColor === null) {
-                if (this.submitButtonColor === "") {
-                    this.payloadTypesubmitButtonColor = "date"
-                } else {
-                    this.payloadTypesubmitButtonColor = "str"
-                }
-            } else if (this.payloadTypesubmitButtonColor === 'string' || this.payloadTypesubmitButtonColor === 'none') {
-                this.payloadTypesubmitButtonColor = "str"
-            }
-
-            $("#node-input-payloadTypesubmitButtonColor").val(this.payloadTypesubmitButtonColor)
-            $("#node-input-submitButtonColor").typedInput({
-                default: "str",
-                typeField: $("#node-input-payloadTypesubmitButtonColor"),
-                types: ["str"]
-            })
-            $("#node-input-submitButtonColor").typedInput("type", this.payloadTypesubmitButtonColor)
-
             if (this.payloadTypecancelButtonLabel === null) {
                 if (this.cancelButtonLabel === "") {
                     this.payloadTypecancelButtonLabel = "date"
@@ -174,6 +152,12 @@
             })
             $("#node-input-width").typedInput("type", this.payloadTypewidth)
 
+            const colorSchemeselectFieldValues = ["blue", "gray", "green", "orange", "pink", "red", "teal", "yellow", "whiteAlpha", "facebook"]
+            colorSchemeselectFieldValues.forEach((val) => {
+                $("#node-input-colorScheme").append($("<option></option>").attr("value", val).text(val))
+            })
+            $("#node-input-colorScheme").val(this.colorScheme)
+
         },
         oneditsave: function() {},
         oneditcancel: function() {},
@@ -209,11 +193,6 @@
         <input type="hidden" id="node-input-payloadTypesubmitButtonLabel">
     </div>
     <div class="form-row">
-        <label for="node-input-submitButtonColor">Submit button color</label>
-        <input type="text" id="node-input-submitButtonColor"></input>
-        <input type="hidden" id="node-input-payloadTypesubmitButtonColor">
-    </div>
-    <div class="form-row">
         <label for="node-input-cancelButtonLabel">Cancel button label</label>
         <input type="text" id="node-input-cancelButtonLabel"></input>
         <input type="hidden" id="node-input-payloadTypecancelButtonLabel">
@@ -222,6 +201,11 @@
         <label for="node-input-width">Width</label>
         <input type="text" id="node-input-width"></input>
         <input type="hidden" id="node-input-payloadTypewidth">
+    </div>
+    <div class="form-row">
+        <label for="node-input-colorScheme">Color scheme</label>
+        <select type="text" id="node-input-colorScheme">
+        </select>
     </div>
 </script>
 
