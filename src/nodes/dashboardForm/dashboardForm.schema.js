@@ -68,6 +68,10 @@ class DashboardForm extends Node {
         let dataToPopulate = {}
         if (Array.isArray(msg.rowData) && msg.rowData.length > 0) {
             dataToPopulate = msg.rowData[0]
+        } else if (msg.rowData && !Array.isArray(msg.rowData)) {
+            dataToPopulate = msg.rowData
+        } else if (Array.isArray(msg.table) && msg.table.length > 0) {
+            dataToPopulate = msg.table[0]
         } else if (typeof msg.payload === 'object' && msg.payload !== null) {
             dataToPopulate = {
                 _identifier: {
