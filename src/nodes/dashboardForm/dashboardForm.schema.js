@@ -41,7 +41,14 @@ class DashboardForm extends Node {
 
             const msg = {
                 payload: payload,
-                rowData: [formData],
+                rowData: [
+                    {
+                    __identifier: {
+                        type: "random",
+                        value: Date.now().toString(36)
+                    },
+                    fields: formData
+                }],
                 _sockId
             }
 
