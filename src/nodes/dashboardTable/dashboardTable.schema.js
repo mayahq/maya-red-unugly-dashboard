@@ -4,6 +4,7 @@ const {
     fields
 } = require('@mayahq/module-sdk')
 const { init, clients, uiEventListener } = require('../../util/socket')
+const convertToTableRow = require('../../util/tableSpec')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
 const colorSchemeOpts = [
@@ -158,6 +159,15 @@ class DashboardTable extends Node {
                     data: msg.rowData
                 }
             }
+        }
+
+        if (!Array.isArray(tableEvent?.data)) {
+            tableEvent.data = [tableEvent.data]
+            const newData = []
+            tableEvent.data.forEach(row => {
+                newData.push(convertToTableRow(row))
+            })
+            tableEvent.data = newData
         }
 
         /**
