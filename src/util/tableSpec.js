@@ -89,7 +89,7 @@ function convertToTableRow(row) {
             return row
         }
 
-        if (Object.values(row).every(v => v.type && v.value !== undefined)) {
+        if (Object.values(row).every(v => v?.type && v?.value !== undefined)) {
             tableRow.fields = row
             return tableRow
         }
