@@ -163,6 +163,7 @@ class DashboardTable extends Node {
 
         if (!Array.isArray(tableEvent?.data)) {
             tableEvent.data = [tableEvent.data]
+            tableEvent.type = 'ADD_ROWS'
         }
         const newData = []
         tableEvent.data.forEach(row => {
