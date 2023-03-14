@@ -163,12 +163,12 @@ class DashboardTable extends Node {
 
         if (!Array.isArray(tableEvent?.data)) {
             tableEvent.data = [tableEvent.data]
-            const newData = []
-            tableEvent.data.forEach(row => {
-                newData.push(convertToTableRow(row))
-            })
-            tableEvent.data = newData
         }
+        const newData = []
+        tableEvent.data.forEach(row => {
+            newData.push(convertToTableRow(row))
+        })
+        tableEvent.data = newData
 
         /**
          * Maintaining table data in context
