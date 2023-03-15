@@ -45,7 +45,6 @@ class DashboardTable extends Node {
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
             truncateAfter: new fields.Typed({ type: "num", allowedTypes: ["num"], display: "Truncate after", defaultVal: -1 }),
             actionButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Action button label", defaultVal: 'Process' }),
-            colorScheme: new fields.Select({ options: colorSchemeOpts, defaultVal: 'blue', displayName: 'Color scheme' })
             // Whatever custom fields the node needs.
         },
     })
@@ -126,8 +125,15 @@ class DashboardTable extends Node {
             /**
              * Prioritizing msg.payload over msg.rowData for now because the
              * JSONSQL node gives out results in payload instead of rowData.
+             * 
+             * UPDATE: JSONSQL now outputs msg.rowData as well
              */
-            if (Array.isArray(msg.payload)) {
+            if (Array.isArray(msg.rowData)) {
+                tableEvent = {
+                    type: 'POPULATE',
+                    data: msg.rowData
+                }
+            } else if (Array.isArray(msg.payload)) {
                 try {
                     const rows = msg.payload.map((data, idx) => {
                         const row = {
@@ -153,12 +159,7 @@ class DashboardTable extends Node {
                         data: rows
                     }
                 } catch (e) {}
-            } else if (Array.isArray(msg.rowData)) {
-                tableEvent = {
-                    type: 'POPULATE',
-                    data: msg.rowData
-                }
-            }
+            } 
         }
 
         if (!Array.isArray(tableEvent?.data)) {

@@ -49,9 +49,6 @@
             payloadTypewidth: {
                 value: "num"
             },
-            colorScheme: {
-                value: "blue"
-            },
         },
         inputs: 1,
         outputs: 1,
@@ -152,12 +149,6 @@
             })
             $("#node-input-width").typedInput("type", this.payloadTypewidth)
 
-            const colorSchemeselectFieldValues = ["blue", "gray", "green", "orange", "pink", "red", "teal", "yellow", "whiteAlpha", "facebook"]
-            colorSchemeselectFieldValues.forEach((val) => {
-                $("#node-input-colorScheme").append($("<option></option>").attr("value", val).text(val))
-            })
-            $("#node-input-colorScheme").val(this.colorScheme)
-
         },
         oneditsave: function() {},
         oneditcancel: function() {},
@@ -201,11 +192,6 @@
         <label for="node-input-width">Width</label>
         <input type="text" id="node-input-width"></input>
         <input type="hidden" id="node-input-payloadTypewidth">
-    </div>
-    <div class="form-row">
-        <label for="node-input-colorScheme">Color scheme</label>
-        <select type="text" id="node-input-colorScheme">
-        </select>
     </div>
 </script>
 

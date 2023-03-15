@@ -47,7 +47,7 @@ class DashboardForm extends Node {
             submitButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Sufieldsbmit button label", defaultVal: 'Submit' }),
             cancelButtonLabel: new fields.Typed({ type: "str", allowedTypes: ["str"], displayName: "Cancel button label", defaultVal: '' }),
             width: new fields.Typed({ type: "num", allowedTypes: ["num"], displayName: "Width", defaultVal: 8 }),
-            colorScheme: new fields.Select({ options: formColorOpts, defaultVal: 'blue', displayName: 'Color scheme' })
+            // colorScheme: new fields.Select({ options: formColorOpts, defaultVal: 'blue', displayName: 'Color scheme' })
         },
     })
 

@@ -6,25 +6,31 @@ const {
 const { init, clients, uiEventListener } = require('../../util/socket')
 const DashboardGroup = require('../dashboardGroup/dashboardGroup.schema')
 
+// const buttonColorOpts = [
+//     'blue',
+//     'gray',
+//     'green',
+//     'orange',
+//     'pink',
+//     'red',
+//     'teal',
+//     'yellow',
+//     'whiteAlpha',
+//     'facebook',
+//     // 'blackAlpha',
+//     // 'cyan',
+//     // 'linkedin',
+//     // 'messenger',
+//     // 'purple',
+//     // 'telegram',
+//     // 'twitter',
+//     // 'whatsapp',
+// ]
+
 const buttonColorOpts = [
-    'blue',
-    'gray',
-    'green',
-    'orange',
-    'pink',
-    'red',
-    'teal',
-    'yellow',
-    'whiteAlpha',
-    'facebook',
-    // 'blackAlpha',
-    // 'cyan',
-    // 'linkedin',
-    // 'messenger',
-    // 'purple',
-    // 'telegram',
-    // 'twitter',
-    // 'whatsapp',
+    'primary',
+    'secondary',
+    'danger'
 ]
 
 const buttonStyles = [
