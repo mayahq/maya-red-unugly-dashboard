@@ -56,20 +56,24 @@ class DashboardForm extends Node {
         uiEventListener.on(`form:${this.redNode.id}`, ({ event, _sockId }) => {
             const { type, formData } = event
             const payload = {}
-            Object.keys(formData).forEach(key => {
-                payload[key] = formData[key]?.value
+            Object.keys(formData.fields).forEach(key => {
+                payload[key] = formData.fields[key]?.value
             })
+            const randomId = Date.now().toString(36)
+
+            const row = formData
+            if (!row._identifier) {
+                row._identifier = {
+                    type: "random",
+                    value: randomId
+                }
+            }
+
+            payload._identifier = row._identifier.value
 
             const msg = {
                 payload: payload,
-                rowData: [
-                    {
-                    __identifier: {
-                        type: "random",
-                        value: Date.now().toString(36)
-                    },
-                    fields: formData
-                }],
+                rowData: [ row ],
                 _sockId
             }
 
